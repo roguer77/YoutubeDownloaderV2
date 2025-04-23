@@ -182,17 +182,26 @@ class YoutubeDownloader:
                             'format_note': fmt['format_note']
                         })
                     
-                    # If no specific formats were found, ensure "best" option is present
-                    if len(video_formats) <= 1:
-                        # We already added "best" earlier, so check if that's all we have
-                        video_formats = [{'format_id': 'best', 'format_note': 'Best Quality (Video)'}]
-                        
-                        # Add some sensible defaults
-                        video_formats.extend([
-                            {'format_id': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]', 'format_note': '1080p (High Quality)'},
-                            {'format_id': 'bestvideo[height<=720]+bestaudio/best[height<=720]', 'format_note': '720p (Medium Quality)'},
-                            {'format_id': 'bestvideo[height<=480]+bestaudio/best[height<=480]', 'format_note': '480p (Low Quality)'},
-                        ])
+                    # Always ensure we have all standard resolutions available
+                    # First remove the existing "best" option so we can reorder properly
+                    video_formats = [f for f in video_formats if f.get('format_id') != 'best']
+                    
+                    # Define all our standard formats from highest to lowest quality
+                    standard_formats = [
+                        {'format_id': 'best', 'format_note': 'Best Quality (Video)'},
+                        {'format_id': 'bestvideo[height<=4320]+bestaudio/best[height<=4320]', 'format_note': '8K (4320p) - Highest Quality'},
+                        {'format_id': 'bestvideo[height<=2160]+bestaudio/best[height<=2160]', 'format_note': '4K (2160p) - Ultra High Quality'},
+                        {'format_id': 'bestvideo[height<=1440]+bestaudio/best[height<=1440]', 'format_note': '2K (1440p) - Very High Quality'},
+                        {'format_id': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]', 'format_note': '1080p - Full HD Quality'},
+                        {'format_id': 'bestvideo[height<=720]+bestaudio/best[height<=720]', 'format_note': '720p - HD Quality'},
+                        {'format_id': 'bestvideo[height<=480]+bestaudio/best[height<=480]', 'format_note': '480p - Standard Quality'},
+                        {'format_id': 'bestvideo[height<=360]+bestaudio/best[height<=360]', 'format_note': '360p - Low Quality'},
+                        {'format_id': 'bestvideo[height<=240]+bestaudio/best[height<=240]', 'format_note': '240p - Very Low Quality'}
+                    ]
+                    
+                    # Add the standard formats at the beginning
+                    # Combine our standard formats with any actual source-specific formats we found
+                    video_formats = standard_formats + video_formats
                     
                     # Audio formats with more options
                     audio_formats = [
@@ -232,10 +241,14 @@ class YoutubeDownloader:
                         'entries': [],
                         'formats': [
                             {'format_id': 'best', 'format_note': 'Best Quality (Video)'},
-                            {'format_id': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]', 'format_note': '1080p (High Quality)'},
-                            {'format_id': 'bestvideo[height<=720]+bestaudio/best[height<=720]', 'format_note': '720p (Medium Quality)'},
-                            {'format_id': 'bestvideo[height<=480]+bestaudio/best[height<=480]', 'format_note': '480p (Low Quality)'},
-                            {'format_id': 'bestvideo[height<=360]+bestaudio/best[height<=360]', 'format_note': '360p (Low Quality)'}
+                            {'format_id': 'bestvideo[height<=4320]+bestaudio/best[height<=4320]', 'format_note': '8K (4320p) - Highest Quality'},
+                            {'format_id': 'bestvideo[height<=2160]+bestaudio/best[height<=2160]', 'format_note': '4K (2160p) - Ultra High Quality'},
+                            {'format_id': 'bestvideo[height<=1440]+bestaudio/best[height<=1440]', 'format_note': '2K (1440p) - Very High Quality'},
+                            {'format_id': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]', 'format_note': '1080p - Full HD Quality'},
+                            {'format_id': 'bestvideo[height<=720]+bestaudio/best[height<=720]', 'format_note': '720p - HD Quality'},
+                            {'format_id': 'bestvideo[height<=480]+bestaudio/best[height<=480]', 'format_note': '480p - Standard Quality'},
+                            {'format_id': 'bestvideo[height<=360]+bestaudio/best[height<=360]', 'format_note': '360p - Low Quality'},
+                            {'format_id': 'bestvideo[height<=240]+bestaudio/best[height<=240]', 'format_note': '240p - Very Low Quality'}
                         ],
                         'audio_formats': [
                             {'format_id': 'bestaudio', 'format_note': 'Best Quality (Audio)'},
@@ -274,10 +287,14 @@ class YoutubeDownloader:
                         'thumbnail': v.thumbnail_url,
                         'formats': [
                             {'format_id': 'best', 'format_note': 'Best Quality (Video)'},
-                            {'format_id': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]', 'format_note': '1080p (High Quality)'},
-                            {'format_id': 'bestvideo[height<=720]+bestaudio/best[height<=720]', 'format_note': '720p (Medium Quality)'},
-                            {'format_id': 'bestvideo[height<=480]+bestaudio/best[height<=480]', 'format_note': '480p (Low Quality)'},
-                            {'format_id': 'bestvideo[height<=360]+bestaudio/best[height<=360]', 'format_note': '360p (Low Quality)'}
+                            {'format_id': 'bestvideo[height<=4320]+bestaudio/best[height<=4320]', 'format_note': '8K (4320p) - Highest Quality'},
+                            {'format_id': 'bestvideo[height<=2160]+bestaudio/best[height<=2160]', 'format_note': '4K (2160p) - Ultra High Quality'},
+                            {'format_id': 'bestvideo[height<=1440]+bestaudio/best[height<=1440]', 'format_note': '2K (1440p) - Very High Quality'},
+                            {'format_id': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]', 'format_note': '1080p - Full HD Quality'},
+                            {'format_id': 'bestvideo[height<=720]+bestaudio/best[height<=720]', 'format_note': '720p - HD Quality'},
+                            {'format_id': 'bestvideo[height<=480]+bestaudio/best[height<=480]', 'format_note': '480p - Standard Quality'},
+                            {'format_id': 'bestvideo[height<=360]+bestaudio/best[height<=360]', 'format_note': '360p - Low Quality'},
+                            {'format_id': 'bestvideo[height<=240]+bestaudio/best[height<=240]', 'format_note': '240p - Very Low Quality'}
                         ],
                         'audio_formats': [
                             {'format_id': 'bestaudio', 'format_note': 'Best Quality (Audio)'},
@@ -319,8 +336,14 @@ class YoutubeDownloader:
             ydl_opts['progress_hooks'] = [progress_hook]
         
         # If it's a playlist and format selection is a named quality, map it
-        if playlist and format_id in ['1080p', '720p', '480p', '360p']:
-            if format_id == '1080p':
+        if playlist and format_id in ['8K', '4K', '2K', '1080p', '720p', '480p', '360p', '240p']:
+            if format_id == '8K' or '4320p' in format_id:
+                ydl_opts['format'] = 'bestvideo[height<=4320]+bestaudio/best[height<=4320]'
+            elif format_id == '4K' or '2160p' in format_id:
+                ydl_opts['format'] = 'bestvideo[height<=2160]+bestaudio/best[height<=2160]'
+            elif format_id == '2K' or '1440p' in format_id:
+                ydl_opts['format'] = 'bestvideo[height<=1440]+bestaudio/best[height<=1440]'
+            elif format_id == '1080p':
                 ydl_opts['format'] = 'bestvideo[height<=1080]+bestaudio/best[height<=1080]'
             elif format_id == '720p':
                 ydl_opts['format'] = 'bestvideo[height<=720]+bestaudio/best[height<=720]'
@@ -328,6 +351,8 @@ class YoutubeDownloader:
                 ydl_opts['format'] = 'bestvideo[height<=480]+bestaudio/best[height<=480]'
             elif format_id == '360p':
                 ydl_opts['format'] = 'bestvideo[height<=360]+bestaudio/best[height<=360]'
+            elif format_id == '240p':
+                ydl_opts['format'] = 'bestvideo[height<=240]+bestaudio/best[height<=240]'
         
         # For playlists, create a ZIP file
         if playlist:
@@ -453,14 +478,22 @@ class YoutubeDownloader:
                                         v = pytube.YouTube(video_url)
                                         
                                         # Select stream based on format_id
-                                        if format_id == '1080p':
+                                        if '4320p' in format_id or '8K' in format_id:
+                                            stream = v.streams.filter(progressive=True, res="2160p").first() or v.streams.get_highest_resolution()
+                                        elif '2160p' in format_id or '4K' in format_id:
+                                            stream = v.streams.filter(progressive=True, res="2160p").first() or v.streams.get_highest_resolution()
+                                        elif '1440p' in format_id or '2K' in format_id:
+                                            stream = v.streams.filter(progressive=True, res="1440p").first() or v.streams.get_highest_resolution()
+                                        elif format_id == '1080p' or '1080p' in format_id:
                                             stream = v.streams.filter(progressive=True, res="1080p").first() or v.streams.get_highest_resolution()
-                                        elif format_id == '720p':
+                                        elif format_id == '720p' or '720p' in format_id:
                                             stream = v.streams.filter(progressive=True, res="720p").first() or v.streams.get_highest_resolution()
-                                        elif format_id == '480p':
+                                        elif format_id == '480p' or '480p' in format_id:
                                             stream = v.streams.filter(progressive=True, res="480p").first() or v.streams.get_highest_resolution()
-                                        elif format_id == '360p':
+                                        elif format_id == '360p' or '360p' in format_id:
                                             stream = v.streams.filter(progressive=True, res="360p").first() or v.streams.get_highest_resolution()
+                                        elif format_id == '240p' or '240p' in format_id:
+                                            stream = v.streams.filter(progressive=True, res="240p").first() or v.streams.get_highest_resolution()
                                         else:
                                             stream = v.streams.get_highest_resolution()
                                         
@@ -480,14 +513,22 @@ class YoutubeDownloader:
                             v = pytube.YouTube(url, on_progress_callback=self._pytube_progress_callback(progress_hook))
                             
                             # Select stream based on format_id
-                            if format_id == '1080p':
+                            if '4320p' in format_id or '8K' in format_id:
+                                stream = v.streams.filter(progressive=True, res="2160p").first() or v.streams.get_highest_resolution()
+                            elif '2160p' in format_id or '4K' in format_id:
+                                stream = v.streams.filter(progressive=True, res="2160p").first() or v.streams.get_highest_resolution()
+                            elif '1440p' in format_id or '2K' in format_id:
+                                stream = v.streams.filter(progressive=True, res="1440p").first() or v.streams.get_highest_resolution()
+                            elif format_id == '1080p' or '1080p' in format_id:
                                 stream = v.streams.filter(progressive=True, res="1080p").first() or v.streams.get_highest_resolution()
-                            elif format_id == '720p':
+                            elif format_id == '720p' or '720p' in format_id:
                                 stream = v.streams.filter(progressive=True, res="720p").first() or v.streams.get_highest_resolution()
-                            elif format_id == '480p':
+                            elif format_id == '480p' or '480p' in format_id:
                                 stream = v.streams.filter(progressive=True, res="480p").first() or v.streams.get_highest_resolution()
-                            elif format_id == '360p':
+                            elif format_id == '360p' or '360p' in format_id:
                                 stream = v.streams.filter(progressive=True, res="360p").first() or v.streams.get_highest_resolution()
+                            elif format_id == '240p' or '240p' in format_id:
+                                stream = v.streams.filter(progressive=True, res="240p").first() or v.streams.get_highest_resolution()
                             else:
                                 stream = v.streams.get_highest_resolution()
                             

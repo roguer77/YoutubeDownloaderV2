@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="error-container">
+            <div class="text-center">
+                <div class="error-icon">
+                    <i class="bi bi-exclamation-triangle text-danger"></i>
+                </div>
+                <h2>Something went wrong</h2>
+                <p class="lead">{{ error }}</p>
+                <a href="/" class="btn btn-primary mt-3">
+                    <i class="bi bi-house-door me-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header bg-dark">
+                <h5 class="mb-0"><i class="bi bi-tools me-2"></i>Troubleshooting Tips</h5>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    <li class="mb-2">
+                        <strong>Invalid URL:</strong> Make sure you're using a proper YouTube URL
+                        <p class="small text-muted">Valid formats: https://www.youtube.com/watch?v=xxxx or https://youtu.be/xxxx</p>
+                    </li>
+                    <li class="mb-2">
+                        <strong>Video Unavailable:</strong> The video might be private, deleted, or region-locked
+                        <p class="small text-muted">Try a different video to confirm the service is working</p>
+                    </li>
+                    <li class="mb-2">
+                        <strong>Format Issues:</strong> Not all formats are available for every video
+                        <p class="small text-muted">Try selecting a different quality or format</p>
+                    </li>
+                    <li>
+                        <strong>Connection Problems:</strong> Ensure you have a stable internet connection
+                        <p class="small text-muted">Larger videos may take longer to process</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

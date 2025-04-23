@@ -1,0 +1,177 @@
+/* Main styling for YouTube Downloader */
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+  --dark-color: #343a40;
+  --light-color: #f8f9fa;
+  --main-font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom container for main content */
+.main-container {
+  flex: 1;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Custom styling for YouTube URL input */
+.url-input-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.url-input-container input {
+  padding-right: 40px; /* Space for the icon */
+}
+
+.url-input-container i {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary-color);
+}
+
+/* Video info card styling */
+.video-info-card {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.video-info-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.video-info-card .card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Format selection styling */
+.format-options {
+  margin-top: 15px;
+}
+
+/* Download button styling */
+.download-btn {
+  margin-top: 10px;
+  min-width: 150px;
+}
+
+/* Progress bar styling */
+.progress {
+  height: 20px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.download-status {
+  text-align: center;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+/* Footer styling */
+footer {
+  padding: 20px 0;
+  text-align: center;
+  margin-top: auto;
+}
+
+/* Playlist items styling */
+.playlist-items {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 15px;
+  border: 1px solid rgba(0,0,0,0.125);
+  border-radius: 0.25rem;
+  padding: 10px;
+}
+
+.playlist-item {
+  padding: 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.125);
+}
+
+.playlist-item:last-child {
+  border-bottom: none;
+}
+
+/* Loading spinner */
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid var(--primary-color);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+  margin: 20px auto;
+  display: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .video-details {
+    text-align: center;
+  }
+  
+  .video-info-card img {
+    margin-bottom: 15px;
+  }
+  
+  .download-btn {
+    width: 100%;
+  }
+}
+
+/* Tab styling for video/audio options */
+.tab-content {
+  padding: 20px 0;
+}
+
+/* Toggle buttons for video/audio */
+.toggle-container {
+  margin-bottom: 20px;
+}
+
+/* Error message styling */
+.error-container {
+  padding: 20px;
+  border-radius: 4px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.error-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}

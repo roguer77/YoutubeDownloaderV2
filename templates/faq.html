@@ -1,0 +1,256 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container my-5 pt-5">
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="mb-3">Frequently Asked Questions</h1>
+            <p class="lead text-muted">Find answers to common questions about downloading YouTube videos and audio files</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="accordion" id="faqAccordion">
+                <!-- Using YouTube Downloader -->
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-header bg-transparent">
+                        <h2 class="h4 mb-0">Using YouTube Downloader</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="accordion" id="usingYTDAccordion">
+                            <div class="accordion-item">
+                                <h3 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        How do I download videos using this tool?
+                                    </button>
+                                </h3>
+                                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#usingYTDAccordion">
+                                    <div class="accordion-body">
+                                        <p>Using our YouTube Downloader is simple:</p>
+                                        <ol>
+                                            <li>Paste the YouTube video or playlist URL into the input field</li>
+                                            <li>Click "Get Video Info" to load the available formats</li>
+                                            <li>Choose your preferred format (video quality or audio format)</li>
+                                            <li>Click "Download" and wait for the process to complete</li>
+                                            <li>Click the download link that appears to save your file</li>
+                                        </ol>
+                                        <p>The entire process happens in your browser - no additional software needed!</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h3 class="accordion-header" id="headingTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        What video formats and qualities are available?
+                                    </button>
+                                </h3>
+                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#usingYTDAccordion">
+                                    <div class="accordion-body">
+                                        <p>Our YouTube Downloader supports a wide range of video formats and qualities:</p>
+                                        <ul>
+                                            <li><strong>Video Formats:</strong> MP4, WebM, and more</li>
+                                            <li><strong>Video Quality:</strong> Up to 1080p Full HD (quality options depend on the original video)</li>
+                                            <li><strong>Audio Formats:</strong> MP3, M4A, and other audio formats</li>
+                                            <li><strong>Audio Quality:</strong> High-quality audio extraction from source videos</li>
+                                        </ul>
+                                        <p>The available formats and qualities are determined by what's available in the original YouTube video.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h3 class="accordion-header" id="headingThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        How do I convert YouTube videos to MP3?
+                                    </button>
+                                </h3>
+                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#usingYTDAccordion">
+                                    <div class="accordion-body">
+                                        <p>Converting YouTube videos to MP3 is straightforward:</p>
+                                        <ol>
+                                            <li>Paste the YouTube video URL in the input field</li>
+                                            <li>Click "Get Video Info" to analyze the video</li>
+                                            <li>Select the "Audio" tab from the download options</li>
+                                            <li>Choose "MP3" from the format options</li>
+                                            <li>Click the download button and wait for the conversion</li>
+                                            <li>Download your MP3 file when processing is complete</li>
+                                        </ol>
+                                        <p>Our tool extracts audio in the highest quality available from the source video.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h3 class="accordion-header" id="headingFour">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                        Can I download YouTube playlists?
+                                    </button>
+                                </h3>
+                                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#usingYTDAccordion">
+                                    <div class="accordion-body">
+                                        <p>Yes, our downloader fully supports YouTube playlist downloads:</p>
+                                        <ol>
+                                            <li>Paste a YouTube playlist URL into the input box</li>
+                                            <li>Our tool will automatically detect that it's a playlist</li>
+                                            <li>Follow the same process as downloading a single video</li>
+                                            <li>All videos from the playlist will be downloaded and packaged as a ZIP file</li>
+                                        </ol>
+                                        <p><strong>Note:</strong> Playlist downloads may take significantly longer depending on the number of videos and selected quality.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Technical Questions -->
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-header bg-transparent">
+                        <h2 class="h4 mb-0">Technical Questions</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="accordion" id="technicalAccordion">
+                            <div class="accordion-item">
+                                <h3 class="accordion-header" id="headingFive">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                        Is this YouTube downloader free to use?
+                                    </button>
+                                </h3>
+                                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#technicalAccordion">
+                                    <div class="accordion-body">
+                                        <p>Yes, our YouTube Downloader is 100% free to use with no hidden costs:</p>
+                                        <ul>
+                                            <li>No registration or account creation required</li>
+                                            <li>No subscription fees or premium features</li>
+                                            <li>No limits on the number of downloads</li>
+                                            <li>All features are completely free to use</li>
+                                        </ul>
+                                        <p>We believe in providing a high-quality, accessible tool for everyone who needs to download YouTube content for personal use.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h3 class="accordion-header" id="headingSix">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                        Is my data safe when using this tool?
+                                    </button>
+                                </h3>
+                                <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#technicalAccordion">
+                                    <div class="accordion-body">
+                                        <p>We take privacy very seriously. Here's how we protect your data:</p>
+                                        <ul>
+                                            <li>We do not store any personal information</li>
+                                            <li>All downloaded files are automatically deleted from our servers after a short period</li>
+                                            <li>We don't track your download history or viewing habits</li>
+                                            <li>No account creation means no personal data is collected</li>
+                                        </ul>
+                                        <p>Your privacy is our priority, and we ensure that using our tool is both safe and secure.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h3 class="accordion-header" id="headingSeven">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                                        Why is my download taking so long?
+                                    </button>
+                                </h3>
+                                <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#technicalAccordion">
+                                    <div class="accordion-body">
+                                        <p>Download times can vary for several reasons:</p>
+                                        <ul>
+                                            <li><strong>Video Quality:</strong> Higher quality videos (1080p) are larger and take longer to process</li>
+                                            <li><strong>Video Length:</strong> Longer videos require more processing time</li>
+                                            <li><strong>Server Load:</strong> During peak times, our servers may be processing many requests</li>
+                                            <li><strong>Your Internet Connection:</strong> Download speed depends on your connection</li>
+                                        </ul>
+                                        <p>If a download is taking too long, you can try selecting a lower quality option or trying again during off-peak hours.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h3 class="accordion-header" id="headingEight">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                                        What browsers are supported?
+                                    </button>
+                                </h3>
+                                <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#technicalAccordion">
+                                    <div class="accordion-body">
+                                        <p>Our YouTube Downloader works with all modern browsers:</p>
+                                        <ul>
+                                            <li>Google Chrome</li>
+                                            <li>Mozilla Firefox</li>
+                                            <li>Microsoft Edge</li>
+                                            <li>Safari</li>
+                                            <li>Opera</li>
+                                        </ul>
+                                        <p>We recommend using the latest version of your preferred browser for the best experience.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Legal Questions -->
+                <div class="card mb-4 border-0 shadow-sm">
+                    <div class="card-header bg-transparent">
+                        <h2 class="h4 mb-0">Legal Information</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="accordion" id="legalAccordion">
+                            <div class="accordion-item">
+                                <h3 class="accordion-header" id="headingNine">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                                        Is it legal to download YouTube videos?
+                                    </button>
+                                </h3>
+                                <div id="collapseNine" class="accordion-collapse collapse" aria-labelledby="headingNine" data-bs-parent="#legalAccordion">
+                                    <div class="accordion-body">
+                                        <p>The legality of downloading YouTube videos depends on several factors:</p>
+                                        <ul>
+                                            <li>Downloading videos for personal use is generally acceptable in many countries</li>
+                                            <li>Downloading copyrighted content may violate YouTube's Terms of Service</li>
+                                            <li>Redistributing, selling, or publicly sharing downloaded content may violate copyright laws</li>
+                                        </ul>
+                                        <p>We encourage users to respect content creators' rights and only download videos for personal, non-commercial use. If you're unsure about the legality in your country, consider consulting local regulations.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <h3 class="accordion-header" id="headingTen">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                                        Can I use downloaded videos commercially?
+                                    </button>
+                                </h3>
+                                <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen" data-bs-parent="#legalAccordion">
+                                    <div class="accordion-body">
+                                        <p>Using downloaded videos commercially requires careful consideration:</p>
+                                        <ul>
+                                            <li>Most YouTube content is protected by copyright</li>
+                                            <li>Commercial use without explicit permission from the content owner is usually prohibited</li>
+                                            <li>Some videos may be available under Creative Commons licenses that allow certain uses</li>
+                                            <li>Always check the video description for licensing information</li>
+                                        </ul>
+                                        <p>For commercial use, we recommend obtaining proper licenses or permissions directly from the content creator or copyright holder.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <p>Still have questions? Check our <a href="/" class="text-decoration-none">homepage</a> for more information or start downloading your videos now.</p>
+                <a href="/" class="btn btn-primary">Download YouTube Videos Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

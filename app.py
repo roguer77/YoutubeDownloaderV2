@@ -36,6 +36,13 @@ downloads_lock = threading.Lock()
 def index():
     """Main page with the video download form"""
     return render_template('index.html')
+    
+@app.route('/faq')
+def faq():
+    """Frequently Asked Questions page"""
+    return render_template('faq.html', 
+                          title='YouTube Downloader FAQ - Answers to Common Questions About Downloading Videos',
+                          description='Find answers to frequently asked questions about downloading YouTube videos and converting videos to MP3 using our free online tool.')
 
 @app.route('/video_info', methods=['POST'])
 def get_video_info():
@@ -218,6 +225,26 @@ def server_error(e):
     """Handle 500 errors"""
     logger.error(f"Server error: {str(e)}")
     return render_template('error.html', error='Server error occurred'), 500
+
+@app.route('/robots.txt')
+def robots():
+    """Serve robots.txt file"""
+    return send_from_directory('static', 'robots.txt')
+
+@app.route('/sitemap.xml')
+def sitemap():
+    """Serve sitemap.xml file"""
+    return send_from_directory('static', 'sitemap.xml')
+
+# SEO-optimized metadata for page titles and descriptions
+@app.context_processor
+def inject_seo_metadata():
+    """Inject SEO metadata for templates"""
+    return {
+        'default_title': 'YouTube Downloader - Download Videos and Audio in High Quality | Free Online Tool',
+        'default_description': 'Free YouTube video downloader that allows you to download YouTube videos and audio in multiple formats and qualities. Convert YouTube videos to MP3, MP4, and more.',
+        'current_year': time.strftime("%Y")
+    }
 
 # Cleanup temporary files before exit
 def cleanup_temp_files():

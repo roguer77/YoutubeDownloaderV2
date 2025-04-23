@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#212529"/>
+  <g transform="translate(600, 315)">
+    <!-- YouTube Logo -->
+    <rect x="-150" y="-75" width="300" height="150" rx="30" fill="#FF0000"/>
+    <polygon points="0,50 -60,-40 60,-40" fill="white" transform="rotate(180)"/>
+    
+    <!-- Text -->
+    <text x="0" y="120" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">YouTube Downloader</text>
+    <text x="0" y="180" font-family="Arial, sans-serif" font-size="28" fill="#adb5bd" text-anchor="middle">Download Videos &amp; Audio in HD Quality</text>
+    
+    <!-- Download Icon -->
+    <circle cx="0" cy="-150" r="80" fill="#28a745"/>
+    <path d="M0,-180 L0,-120 M-40,-130 L0,-90 L40,-130" stroke="white" stroke-width="15" fill="none"/>
+  </g>
+</svg>

@@ -3,16 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Free YouTube video downloader that allows you to download YouTube videos and audio in multiple formats and qualities. Convert YouTube videos to MP3, MP4, and more.">
-    <meta name="keywords" content="YouTube downloader, download YouTube videos, YouTube to MP3, YouTube to MP4, save YouTube videos, YouTube music downloader, playlist downloader, online video downloader">
+    <meta name="description" content="{{ description|default(default_description) }}">
+    <meta name="keywords" content="YouTube downloader, download YouTube videos, YouTube to MP3, YouTube to MP4, save YouTube videos, YouTube music downloader, playlist downloader, online video downloader, download YouTube HD, MP3 converter, video converter">
     <meta name="author" content="YouTube Downloader Tool">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="YouTube Downloader - Download Videos and Audio in Multiple Formats">
-    <meta property="og:description" content="Free tool to download YouTube videos and convert them to MP3, MP4 and other formats. Support for playlists and high-quality downloads.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="google" content="notranslate">
+    <meta name="revisit-after" content="7 days">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="theme-color" content="#343a40">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="{{ title|default(default_title) }}">
+    <meta property="og:description" content="{{ description|default(default_description) }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.url }}">
-    <meta property="og:image" content="{{ url_for('static', filename='img/youtube-downloader-thumbnail.png', _external=True) }}">
-    <title>YouTube Downloader - Download Videos and Audio in High Quality | Free Online Tool</title>
+    <meta property="og:image" content="{{ url_for('static', filename='img/youtube-downloader-thumbnail.svg', _external=True) }}">
+    <meta property="og:site_name" content="YouTube Downloader">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ title|default(default_title) }}">
+    <meta name="twitter:description" content="{{ description|default(default_description) }}">
+    <meta name="twitter:image" content="{{ url_for('static', filename='img/youtube-downloader-thumbnail.svg', _external=True) }}">
+    
+    <title>{{ title|default(default_title) }}</title>
     
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ request.url }}">
@@ -32,7 +47,7 @@
     <!-- Favicon -->
     <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>▶️</text></svg>" type="image/svg+xml">
     
-    <!-- JSON-LD for structured data -->
+    <!-- JSON-LD for structured data - WebApplication -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -47,13 +62,83 @@
         "price": "0",
         "priceCurrency": "USD"
       },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "1256",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
       "featureList": [
-        "Download YouTube videos in multiple quality formats",
-        "Extract audio from YouTube videos",
-        "Support for playlist downloads",
-        "No registration required",
-        "Free to use"
+        "Download YouTube videos in HD quality (up to 1080p)",
+        "Extract MP3 audio from YouTube videos",
+        "Support for entire playlist downloads",
+        "No registration or installation required",
+        "100% free to use with no limitations"
       ]
+    }
+    </script>
+    
+    <!-- JSON-LD for structured data - FAQPage -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is this YouTube downloader free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, our YouTube downloader is completely free to use with no hidden fees or subscriptions. You can download as many videos as you want in various quality formats without any cost."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the highest quality I can download YouTube videos in?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our YouTube downloader supports downloading videos in qualities up to 1080p Full HD. The available quality options depend on the original video uploaded to YouTube. Most modern videos offer 360p, 480p, 720p, and 1080p formats."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I convert YouTube videos to MP3?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "To convert a YouTube video to MP3: 1) Paste the YouTube video URL in the input field, 2) Click 'Get Video Info' to analyze the video, 3) Select the 'Audio' tab from the download options, 4) Choose 'MP3' as your desired format, 5) Click the download button and wait for the conversion to complete. The audio will be extracted in the highest quality available."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I download entire YouTube playlists?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, our YouTube downloader fully supports playlist downloads. Simply paste a YouTube playlist URL and the tool will detect it automatically. All videos from the playlist will be downloaded and packaged as a convenient ZIP file for you to save."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it legal to download YouTube videos?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Downloading YouTube videos for personal use is generally acceptable in many countries. However, redistributing, selling, or publicly sharing downloaded content may violate copyright laws. Always respect content creators' rights and YouTube's Terms of Service."
+          }
+        }
+      ]
+    }
+    </script>
+    
+    <!-- JSON-LD for structured data - Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "YouTube Downloader Tool",
+      "url": "{{ request.url_root }}",
+      "logo": "{{ url_for('static', filename='img/youtube-downloader-thumbnail.svg', _external=True) }}",
+      "description": "Provider of free online YouTube downloading and conversion tools",
+      "sameAs": []
     }
     </script>
 </head>

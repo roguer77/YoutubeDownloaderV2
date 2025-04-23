@@ -1,5 +1,41 @@
 /* Custom styles for YouTube Downloader */
 
+/* Animation classes for smooth transitions */
+.fade-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Format highlight animation */
+@keyframes highlight-pulse {
+  0% { background-color: transparent; }
+  50% { background-color: rgba(40, 167, 69, 0.1); }
+  100% { background-color: transparent; }
+}
+
+.highlight-pulse {
+  animation: highlight-pulse 1.5s ease infinite;
+}
+
+/* Spinner text animation */
+.spinner-text {
+  display: inline-block;
+  min-width: 30px;
+  text-align: left;
+}
+
 /* Custom card styling for video info */
 .video-card {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

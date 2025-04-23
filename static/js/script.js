@@ -177,8 +177,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function displayVideoInfo(videoInfo) {
-        // Show video info container
+        // Show video info container with a fade-in effect
+        videoInfoContainer.style.opacity = '0';
         videoInfoContainer.style.display = 'block';
+        
+        // Animate the container appearance
+        setTimeout(() => {
+            videoInfoContainer.style.opacity = '1';
+            videoInfoContainer.style.transition = 'opacity 0.5s ease';
+        }, 10);
         
         if (videoInfo.is_playlist) {
             // Display playlist information
@@ -203,19 +210,44 @@ document.addEventListener('DOMContentLoaded', function() {
             videoTab.show();
         }
         
-        // Scroll to the format selection area to improve UX
+        // Scroll to the format selection area and add highlight effect
         setTimeout(() => {
+            // Smooth scroll to the video info container
             videoInfoContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             
-            // Also highlight the format selection area with a subtle animation
-            const formatTabsContent = document.getElementById('formatTabsContent');
-            if (formatTabsContent) {
-                formatTabsContent.classList.add('highlight-pulse');
+            // Add highlight effect to the formats section
+            setTimeout(() => {
+                // Find all format options containers
+                const formatContainers = document.querySelectorAll('.format-options');
+                const formatTabsContent = document.getElementById('formatTabsContent');
+                
+                // Apply highlight pulse to the format tabs content area
+                if (formatTabsContent) {
+                    formatTabsContent.classList.add('highlight-pulse');
+                    setTimeout(() => {
+                        formatTabsContent.classList.remove('highlight-pulse');
+                    }, 2000);
+                }
+                
+                // Add highlight to individual format options
+                formatContainers.forEach(container => {
+                    container.classList.add('highlight-pulse');
+                    setTimeout(() => {
+                        container.classList.remove('highlight-pulse');
+                    }, 2000);
+                });
+                
+                // Highlight the download button after format selection
                 setTimeout(() => {
-                    formatTabsContent.classList.remove('highlight-pulse');
-                }, 1500);
-            }
-        }, 100);
+                    if (downloadButton) {
+                        downloadButton.classList.add('highlight-pulse');
+                        setTimeout(() => {
+                            downloadButton.classList.remove('highlight-pulse');
+                        }, 2000);
+                    }
+                }, 2200);
+            }, 800);
+        }, 600);
     }
     
     function displaySingleVideoInfo(videoInfo) {

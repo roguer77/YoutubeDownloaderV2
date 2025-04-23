@@ -140,6 +140,26 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update download button state
         updateDownloadButton();
+        
+        // Make sure the formats tab is active by default
+        if (videoTabButton && typeof bootstrap !== 'undefined' && bootstrap.Tab) {
+            const videoTab = new bootstrap.Tab(videoTabButton);
+            videoTab.show();
+        }
+        
+        // Scroll to the format selection area to improve UX
+        setTimeout(() => {
+            videoInfoContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Also highlight the format selection area with a subtle animation
+            const formatTabsContent = document.getElementById('formatTabsContent');
+            if (formatTabsContent) {
+                formatTabsContent.classList.add('highlight-pulse');
+                setTimeout(() => {
+                    formatTabsContent.classList.remove('highlight-pulse');
+                }, 1500);
+            }
+        }, 100);
     }
     
     function displaySingleVideoInfo(videoInfo) {

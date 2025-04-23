@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% set title = "Privacy Policy - YouTube Downloader" %}
+{% set description = "Privacy Policy for YouTube Downloader explaining how we collect, use, and protect your data." %}
+
+{% block content %}
+<div class="container my-5 pt-5">
+    <div class="row mb-4">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="mb-3">Privacy Policy</h1>
+            <p class="lead text-muted">Last updated: {{ current_year }}</p>
+            
+            <div class="card border-0 shadow-sm p-4 mb-5">
+                <h2 class="h5 mb-3">Introduction</h2>
+                <p>At YouTube Downloader, we respect your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.</p>
+                
+                <h2 class="h5 mb-3 mt-4">Information We Collect</h2>
+                <p>We collect minimal data necessary to provide our service effectively:</p>
+                <ul>
+                    <li><strong>Usage Data:</strong> We anonymously track website visits and download statistics for service improvement purposes.</li>
+                    <li><strong>YouTube URLs:</strong> We process the YouTube URLs you submit to download videos.</li>
+                    <li><strong>IP Address:</strong> We collect partially anonymized IP addresses for basic analytics and to prevent abuse.</li>
+                </ul>
+                
+                <h2 class="h5 mb-3 mt-4">How We Use Your Information</h2>
+                <p>We use the collected information for the following purposes:</p>
+                <ul>
+                    <li>To provide and maintain our service</li>
+                    <li>To monitor usage patterns and improve our service</li>
+                    <li>To detect, prevent, and address technical issues</li>
+                </ul>
+                
+                <h2 class="h5 mb-3 mt-4">Data Security</h2>
+                <p>We implement appropriate security measures to protect against unauthorized access, alteration, disclosure, or destruction of your data:</p>
+                <ul>
+                    <li>Downloaded videos are stored temporarily and deleted after download completion</li>
+                    <li>IP addresses are partially anonymized by removing the last octet</li>
+                    <li>No user account information is collected or stored</li>
+                </ul>
+                
+                <h2 class="h5 mb-3 mt-4">Data Retention</h2>
+                <p>We retain usage statistics for analytical purposes, but these do not contain personally identifiable information. Downloaded videos are automatically deleted after you download them, typically within 5 minutes.</p>
+                
+                <h2 class="h5 mb-3 mt-4">Third-Party Services</h2>
+                <p>Our service interacts with YouTube to retrieve video content. Please be aware that YouTube has its own Privacy Policy that applies when you use their services.</p>
+                
+                <h2 class="h5 mb-3 mt-4">Your Data Rights</h2>
+                <p>Since we collect minimal personal data, we do not implement specific data access or deletion mechanisms. However, you may contact us if you have concerns about your data.</p>
+                
+                <h2 class="h5 mb-3 mt-4">Cookies</h2>
+                <p>We use essential cookies that are necessary for the functioning of our website. No tracking or marketing cookies are used.</p>
+                
+                <h2 class="h5 mb-3 mt-4">Changes to This Privacy Policy</h2>
+                <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
+                
+                <h2 class="h5 mb-3 mt-4">Contact Us</h2>
+                <p>If you have any questions about this Privacy Policy, please contact us.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

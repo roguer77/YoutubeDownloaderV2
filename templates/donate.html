@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+{% set title = "Support Us - YouTube Downloader" %}
+{% set description = "Support the YouTube Downloader project with a small donation to help us maintain this free service." %}
+
+{% block content %}
+<div class="container my-5 pt-5">
+    <div class="row mb-4">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="mb-3">Support Our Project</h1>
+            <p class="lead text-muted">Help us keep YouTube Downloader free and ad-free</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm p-4 mb-5">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h2 class="h4 mb-3">Why Donate?</h2>
+                        <p>YouTube Downloader is completely free to use, but maintaining the service requires resources:</p>
+                        <ul class="mb-4">
+                            <li>Server costs to keep the service running 24/7</li>
+                            <li>Development time to add new features and fix bugs</li>
+                            <li>Bandwidth for video processing and downloads</li>
+                            <li>Constant updates to adapt to YouTube's changes</li>
+                        </ul>
+                        
+                        <p>Even a small contribution helps us:</p>
+                        <ul>
+                            <li>Keep the service running without ads</li>
+                            <li>Improve download speed and reliability</li>
+                            <li>Add new features and format options</li>
+                            <li>Support more video platforms in the future</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-5">
+                        <div class="card bg-light border-0 p-4 h-100">
+                            <div class="text-center mb-3">
+                                <span class="display-4 text-primary">$1</span>
+                                <p class="text-muted">Suggested donation</p>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <a href="#" id="paypal-donate-btn" class="btn btn-primary">
+                                    <i class="bi bi-paypal me-2"></i>Donate with PayPal
+                                </a>
+                                <div class="text-center mt-2">
+                                    <small class="text-muted">Secure payment via PayPal</small>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center mt-4 small">
+                                <p>Other amounts:</p>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary donation-amount" data-amount="2">$2</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary donation-amount" data-amount="5">$5</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary donation-amount" data-amount="10">$10</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mb-5">
+                <p class="text-muted">Thank you for your support! ❤️</p>
+                <a href="/" class="btn btn-outline-secondary">Return to Homepage</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set the default donation amount
+        let donationAmount = 1;
+        
+        // Update PayPal button URL with the selected amount
+        function updatePayPalButton() {
+            // In a real implementation, you would set your PayPal business email here
+            const paypalEmail = 'your-paypal-email@example.com';
+            const itemName = 'YouTube Downloader Support';
+            const currency = 'USD';
+            
+            // Create PayPal URL
+            const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=${encodeURIComponent(paypalEmail)}&item_name=${encodeURIComponent(itemName)}&amount=${donationAmount}&currency_code=${currency}`;
+            
+            // Update button URL
+            document.getElementById('paypal-donate-btn').href = paypalUrl;
+        }
+        
+        // Initialize the PayPal button
+        updatePayPalButton();
+        
+        // Add event listeners to the donation amount buttons
+        document.querySelectorAll('.donation-amount').forEach(button => {
+            button.addEventListener('click', function() {
+                donationAmount = this.getAttribute('data-amount');
+                updatePayPalButton();
+                
+                // Update UI to show selected amount
+                document.querySelectorAll('.donation-amount').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    });
+</script>
+{% endblock %}

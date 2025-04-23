@@ -329,6 +329,21 @@ def sitemap():
     """Serve sitemap.xml file"""
     return send_from_directory('static', 'sitemap.xml')
 
+@app.route('/privacy')
+def privacy_policy():
+    """Privacy Policy page"""
+    return render_template('privacy.html')
+
+@app.route('/disclaimer')
+def disclaimer():
+    """Disclaimer and Terms of Service page"""
+    return render_template('disclaimer.html')
+
+@app.route('/donate')
+def donate():
+    """Donation page"""
+    return render_template('donate.html')
+
 @app.route('/admin')
 def admin_dashboard():
     """Admin dashboard with download statistics"""

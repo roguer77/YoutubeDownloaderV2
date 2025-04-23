@@ -104,14 +104,17 @@ class YoutubeDownloader:
                         'entries': [],
                         'formats': [
                             {'format_id': 'best', 'format_note': 'Best Quality (Video)'},
-                            {'format_id': '720p', 'format_note': '720p (Video)'},
-                            {'format_id': '480p', 'format_note': '480p (Video)'},
-                            {'format_id': '360p', 'format_note': '360p (Video)'}
+                            {'format_id': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]', 'format_note': '1080p (High Quality)'},
+                            {'format_id': 'bestvideo[height<=720]+bestaudio/best[height<=720]', 'format_note': '720p (Medium Quality)'},
+                            {'format_id': 'bestvideo[height<=480]+bestaudio/best[height<=480]', 'format_note': '480p (Low Quality)'},
+                            {'format_id': 'bestvideo[height<=360]+bestaudio/best[height<=360]', 'format_note': '360p (Low Quality)'}
                         ],
                         'audio_formats': [
                             {'format_id': 'bestaudio', 'format_note': 'Best Quality (Audio)'},
-                            {'format_id': 'mp3', 'format_note': 'MP3'},
-                            {'format_id': 'm4a', 'format_note': 'M4A'}
+                            {'format_id': 'bestaudio[ext=m4a]/bestaudio', 'format_note': 'M4A (High Quality)'},
+                            {'format_id': 'bestaudio[ext=mp3]/bestaudio', 'format_note': 'MP3 (High Quality)'},
+                            {'format_id': 'bestaudio[abr>=128]/bestaudio', 'format_note': 'MP3 (128kbps)'},
+                            {'format_id': 'bestaudio[abr>=96]/bestaudio', 'format_note': 'MP3 (96kbps)'}
                         ]
                     }
                     
@@ -131,35 +134,73 @@ class YoutubeDownloader:
                     # Handle single video
                     # Process formats into quality groups
                     formats = info.get('formats', [])
-                    format_dict = {}
                     
                     # Extract the desired formats for the UI
                     video_formats = []
+                    added_resolutions = set()  # Track which resolutions we've already added
+                    
+                    # First, add a "best quality" option
+                    video_formats.append({'format_id': 'best', 'format_note': 'Best Quality (Video)'})
+                    
+                    # Process combined formats (those with both video and audio)
+                    combined_formats = []
                     for f in formats:
+                        # Only include formats with both video and audio
                         if f.get('vcodec') != 'none' and f.get('acodec') != 'none':
                             height = f.get('height', 0)
-                            if height >= 1080 and '1080p' not in format_dict:
-                                format_dict['1080p'] = f['format_id']
-                                video_formats.append({'format_id': f['format_id'], 'format_note': '1080p (Video)'})
-                            elif height >= 720 and height < 1080 and '720p' not in format_dict:
-                                format_dict['720p'] = f['format_id']
-                                video_formats.append({'format_id': f['format_id'], 'format_note': '720p (Video)'})
-                            elif height >= 480 and height < 720 and '480p' not in format_dict:
-                                format_dict['480p'] = f['format_id']
-                                video_formats.append({'format_id': f['format_id'], 'format_note': '480p (Video)'})
-                            elif height >= 360 and height < 480 and '360p' not in format_dict:
-                                format_dict['360p'] = f['format_id']
-                                video_formats.append({'format_id': f['format_id'], 'format_note': '360p (Video)'})
+                            width = f.get('width', 0)
+                            format_id = f.get('format_id', '')
+                            format_note = f.get('format_note', '')
+                            ext = f.get('ext', 'mp4')
+                            tbr = f.get('tbr', 0)  # Bitrate in KBps
+                            
+                            # Create a format display name with resolution and bitrate
+                            if height > 0:
+                                resolution = f"{width}x{height}"
+                                display_name = f"{height}p"
+                                if tbr > 0:
+                                    display_name += f" ({round(tbr)}kbps)"
+                                display_name += f" - {ext.upper()}"
+                                
+                                # Add the format
+                                combined_formats.append({
+                                    'format_id': format_id,
+                                    'format_note': display_name,
+                                    'height': height,
+                                    'width': width,
+                                    'ext': ext,
+                                    'tbr': tbr
+                                })
                     
-                    # If no specific formats were found, add "best" option
-                    if not video_formats:
-                        video_formats.append({'format_id': 'best', 'format_note': 'Best Quality (Video)'})
+                    # Sort by height (resolution) then bitrate
+                    combined_formats.sort(key=lambda x: (-x['height'], -x.get('tbr', 0)))
                     
-                    # Audio formats
+                    # Add the formats, avoiding pure duplicates
+                    for fmt in combined_formats:
+                        video_formats.append({
+                            'format_id': fmt['format_id'],
+                            'format_note': fmt['format_note']
+                        })
+                    
+                    # If no specific formats were found, ensure "best" option is present
+                    if len(video_formats) <= 1:
+                        # We already added "best" earlier, so check if that's all we have
+                        video_formats = [{'format_id': 'best', 'format_note': 'Best Quality (Video)'}]
+                        
+                        # Add some sensible defaults
+                        video_formats.extend([
+                            {'format_id': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]', 'format_note': '1080p (High Quality)'},
+                            {'format_id': 'bestvideo[height<=720]+bestaudio/best[height<=720]', 'format_note': '720p (Medium Quality)'},
+                            {'format_id': 'bestvideo[height<=480]+bestaudio/best[height<=480]', 'format_note': '480p (Low Quality)'},
+                        ])
+                    
+                    # Audio formats with more options
                     audio_formats = [
                         {'format_id': 'bestaudio', 'format_note': 'Best Quality (Audio)'},
-                        {'format_id': 'mp3', 'format_note': 'MP3'},
-                        {'format_id': 'm4a', 'format_note': 'M4A'}
+                        {'format_id': 'bestaudio[ext=m4a]/bestaudio', 'format_note': 'M4A (High Quality)'},
+                        {'format_id': 'bestaudio[ext=mp3]/bestaudio', 'format_note': 'MP3 (High Quality)'},
+                        {'format_id': 'bestaudio[abr>=128]/bestaudio', 'format_note': 'MP3 (128kbps)'},
+                        {'format_id': 'bestaudio[abr>=96]/bestaudio', 'format_note': 'MP3 (96kbps)'}
                     ]
                     
                     return {
@@ -191,14 +232,17 @@ class YoutubeDownloader:
                         'entries': [],
                         'formats': [
                             {'format_id': 'best', 'format_note': 'Best Quality (Video)'},
-                            {'format_id': '720p', 'format_note': '720p (Video)'},
-                            {'format_id': '480p', 'format_note': '480p (Video)'},
-                            {'format_id': '360p', 'format_note': '360p (Video)'}
+                            {'format_id': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]', 'format_note': '1080p (High Quality)'},
+                            {'format_id': 'bestvideo[height<=720]+bestaudio/best[height<=720]', 'format_note': '720p (Medium Quality)'},
+                            {'format_id': 'bestvideo[height<=480]+bestaudio/best[height<=480]', 'format_note': '480p (Low Quality)'},
+                            {'format_id': 'bestvideo[height<=360]+bestaudio/best[height<=360]', 'format_note': '360p (Low Quality)'}
                         ],
                         'audio_formats': [
                             {'format_id': 'bestaudio', 'format_note': 'Best Quality (Audio)'},
-                            {'format_id': 'mp3', 'format_note': 'MP3'},
-                            {'format_id': 'm4a', 'format_note': 'M4A'}
+                            {'format_id': 'bestaudio[ext=m4a]/bestaudio', 'format_note': 'M4A (High Quality)'},
+                            {'format_id': 'bestaudio[ext=mp3]/bestaudio', 'format_note': 'MP3 (High Quality)'},
+                            {'format_id': 'bestaudio[abr>=128]/bestaudio', 'format_note': 'MP3 (128kbps)'},
+                            {'format_id': 'bestaudio[abr>=96]/bestaudio', 'format_note': 'MP3 (96kbps)'}
                         ]
                     }
                     
@@ -230,14 +274,17 @@ class YoutubeDownloader:
                         'thumbnail': v.thumbnail_url,
                         'formats': [
                             {'format_id': 'best', 'format_note': 'Best Quality (Video)'},
-                            {'format_id': '720p', 'format_note': '720p (Video)'},
-                            {'format_id': '480p', 'format_note': '480p (Video)'},
-                            {'format_id': '360p', 'format_note': '360p (Video)'}
+                            {'format_id': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]', 'format_note': '1080p (High Quality)'},
+                            {'format_id': 'bestvideo[height<=720]+bestaudio/best[height<=720]', 'format_note': '720p (Medium Quality)'},
+                            {'format_id': 'bestvideo[height<=480]+bestaudio/best[height<=480]', 'format_note': '480p (Low Quality)'},
+                            {'format_id': 'bestvideo[height<=360]+bestaudio/best[height<=360]', 'format_note': '360p (Low Quality)'}
                         ],
                         'audio_formats': [
                             {'format_id': 'bestaudio', 'format_note': 'Best Quality (Audio)'},
-                            {'format_id': 'mp3', 'format_note': 'MP3'},
-                            {'format_id': 'm4a', 'format_note': 'M4A'}
+                            {'format_id': 'bestaudio[ext=m4a]/bestaudio', 'format_note': 'M4A (High Quality)'},
+                            {'format_id': 'bestaudio[ext=mp3]/bestaudio', 'format_note': 'MP3 (High Quality)'},
+                            {'format_id': 'bestaudio[abr>=128]/bestaudio', 'format_note': 'MP3 (128kbps)'},
+                            {'format_id': 'bestaudio[abr>=96]/bestaudio', 'format_note': 'MP3 (96kbps)'}
                         ],
                         'uploader': v.author,
                         'view_count': v.views

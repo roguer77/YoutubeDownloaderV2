@@ -363,21 +363,37 @@ def admin_dashboard():
         visits_data.append(stat.visits if stat else 0)
         downloads_data.append(stat.downloads if stat else 0)
     
-    # Get popular downloads (using raw SQL for grouping and counting)
-    from sqlalchemy import text
-    popular_downloads = db.session.execute(
-        text("""
-        SELECT video_title, format_type, quality, COUNT(*) as count
-        FROM download
-        WHERE status = 'completed'
-        GROUP BY video_title, format_type, quality
-        ORDER BY count DESC
-        LIMIT 10
-        """)
-    ).fetchall()
+    # Get popular downloads (using ORM instead of raw SQL)
+    popular_downloads = []
+    try:
+        # Check if we have any completed downloads first
+        if db.session.query(Download.id).filter_by(status='completed').first() is not None:
+            # Use ORM to group and count downloads
+            from sqlalchemy import func
+            popular_downloads_query = (
+                db.session.query(
+                    Download.video_title,
+                    Download.format_type,
+                    Download.quality,
+                    func.count(Download.id).label('count')
+                )
+                .filter(Download.status == 'completed')
+                .group_by(Download.video_title, Download.format_type, Download.quality)
+                .order_by(func.count(Download.id).desc())
+                .limit(10)
+            )
+            popular_downloads = popular_downloads_query.all()
+    except Exception as e:
+        logger.error(f"Error getting popular downloads: {str(e)}")
+        popular_downloads = []
     
     # Get recent downloads
-    recent_downloads = Download.query.order_by(Download.created_at.desc()).limit(20).all()
+    recent_downloads = []
+    try:
+        recent_downloads = Download.query.order_by(Download.created_at.desc()).limit(20).all()
+    except Exception as e:
+        logger.error(f"Error getting recent downloads: {str(e)}")
+        recent_downloads = []
     
     return render_template(
         'admin.html',

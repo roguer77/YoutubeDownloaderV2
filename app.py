@@ -3,7 +3,7 @@ import logging
 import tempfile
 import time
 import threading
-from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 import urllib.parse
 

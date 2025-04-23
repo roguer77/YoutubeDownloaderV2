@@ -4,68 +4,80 @@
 <div class="row justify-content-center">
     <div class="col-md-10">
         <!-- Header -->
-        <div class="text-center mb-4">
+        <header class="text-center mb-4">
             <h1 class="display-4">
-                <i class="bi bi-youtube text-danger"></i> YouTube Downloader
+                <i class="bi bi-youtube text-danger" aria-hidden="true"></i> Free YouTube Video Downloader Online
             </h1>
-            <p class="lead">Download videos and audio from YouTube in various formats</p>
-        </div>
+            <p class="lead">Download HD videos and MP3 audio from YouTube - No installation required</p>
+            <p>The fastest, easiest way to save YouTube content in high quality formats</p>
+        </header>
         
-        <!-- URL Input Form -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <form id="youtube-form">
-                    <div class="url-input-container">
-                        <label for="youtube-url" class="form-label">Enter YouTube URL</label>
-                        <input type="url" class="form-control form-control-lg" id="youtube-url" 
-                               placeholder="https://www.youtube.com/watch?v=..." required>
-                        <i class="bi bi-link-45deg"></i>
-                    </div>
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-search me-2"></i>Get Video Info
-                        </button>
-                    </div>
-                </form>
+        <!-- URL Input Form - Main CTA -->
+        <section class="mb-5" aria-labelledby="download-section">
+            <h2 id="download-section" class="visually-hidden">Download YouTube Videos</h2>
+            <div class="card mb-4 border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">Download Any YouTube Video or Audio Now</h3>
+                </div>
+                <div class="card-body">
+                    <form id="youtube-form" aria-label="YouTube downloader form">
+                        <div class="url-input-container">
+                            <label for="youtube-url" class="form-label">Enter YouTube URL</label>
+                            <input type="url" class="form-control form-control-lg" id="youtube-url" 
+                                   placeholder="https://www.youtube.com/watch?v=..." required
+                                   aria-describedby="url-help">
+                            <i class="bi bi-link-45deg" aria-hidden="true"></i>
+                            <div id="url-help" class="form-text">Paste any YouTube video or playlist link here</div>
+                        </div>
+                        <div class="d-grid gap-2 mt-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-search me-2" aria-hidden="true"></i>Get Video Info
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
+        </section>
         
         <!-- Features Section -->
-        <div class="row mb-4">
-            <div class="col-md-4 mb-3">
-                <div class="card h-100 feature-card">
-                    <div class="card-body text-center">
-                        <div class="feature-icon">
-                            <i class="bi bi-collection-play"></i>
+        <section class="mb-5" aria-labelledby="features-section">
+            <h2 id="features-section" class="h3 text-center mb-4">Why Choose Our YouTube Downloader</h2>
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 feature-card">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">
+                                <i class="bi bi-collection-play" aria-hidden="true"></i>
+                            </div>
+                            <h3 class="h5 card-title">High-Quality Formats</h3>
+                            <p class="card-text">Download videos in HD quality from 360p to 1080p - perfect for any device</p>
                         </div>
-                        <h5 class="card-title">Multiple Formats</h5>
-                        <p class="card-text">Download videos in various qualities, from 360p to 1080p</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 feature-card">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">
+                                <i class="bi bi-music-note-beamed" aria-hidden="true"></i>
+                            </div>
+                            <h3 class="h5 card-title">MP3 Audio Extraction</h3>
+                            <p class="card-text">Convert YouTube videos to MP3 audio files in the highest quality for music and podcasts</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 feature-card">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">
+                                <i class="bi bi-list-ol" aria-hidden="true"></i>
+                            </div>
+                            <h3 class="h5 card-title">Playlist Support</h3>
+                            <p class="card-text">Download entire YouTube playlists with a single click - save hours of music or videos</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-3">
-                <div class="card h-100 feature-card">
-                    <div class="card-body text-center">
-                        <div class="feature-icon">
-                            <i class="bi bi-music-note-beamed"></i>
-                        </div>
-                        <h5 class="card-title">Audio Extraction</h5>
-                        <p class="card-text">Extract audio from videos in MP3 or other audio formats</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="card h-100 feature-card">
-                    <div class="card-body text-center">
-                        <div class="feature-icon">
-                            <i class="bi bi-list-ol"></i>
-                        </div>
-                        <h5 class="card-title">Playlist Support</h5>
-                        <p class="card-text">Download entire playlists with a single operation</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </section>
         
         <!-- Error Container -->
         <div id="error-container" style="display: none;"></div>
@@ -80,41 +92,51 @@
         <div id="video-info" class="card video-info-card" style="display: none;">
             <div class="card-body">
                 <!-- Single Video Details -->
-                <div id="video-details" style="display: none;">
+                <div id="video-details" style="display: none;" aria-live="polite">
                     <div class="row">
                         <div class="col-md-4 mb-3 mb-md-0">
-                            <img id="video-thumbnail" src="" alt="Video Thumbnail" class="img-fluid rounded">
+                            <img id="video-thumbnail" src="" alt="Thumbnail preview of YouTube video" class="img-fluid rounded shadow">
                         </div>
                         <div class="col-md-8 video-details">
                             <h4 id="video-title" class="mb-2"></h4>
                             <div class="d-flex flex-wrap mb-3">
-                                <span class="badge bg-secondary me-2 mb-1">
-                                    <i class="bi bi-clock me-1"></i>
+                                <span class="badge bg-secondary me-2 mb-1" aria-label="Video duration">
+                                    <i class="bi bi-clock me-1" aria-hidden="true"></i>
                                     <span id="video-duration"></span>
                                 </span>
-                                <span class="badge bg-secondary me-2 mb-1">
-                                    <i class="bi bi-person me-1"></i>
+                                <span class="badge bg-secondary me-2 mb-1" aria-label="Video uploader">
+                                    <i class="bi bi-person me-1" aria-hidden="true"></i>
                                     <span id="video-uploader"></span>
                                 </span>
-                                <span class="badge bg-secondary mb-1">
-                                    <i class="bi bi-eye me-1"></i>
+                                <span class="badge bg-secondary mb-1" aria-label="View count">
+                                    <i class="bi bi-eye me-1" aria-hidden="true"></i>
                                     <span id="video-views"></span>
                                 </span>
+                            </div>
+                            <div class="mt-3">
+                                <h5 class="h6 text-muted">About This Video</h5>
+                                <p class="small video-description">This video is available for download in various formats. Please select your preferred quality below.</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Playlist Info -->
-                <div id="playlist-info" style="display: none;">
+                <div id="playlist-info" style="display: none;" aria-live="polite">
                     <div class="card-title">
-                        <h4 id="playlist-title"></h4>
-                        <div class="badge bg-danger">
-                            <i class="bi bi-collection-play me-1"></i>
+                        <h4 id="playlist-title" class="mb-2"></h4>
+                        <div class="badge bg-danger mb-3">
+                            <i class="bi bi-collection-play me-1" aria-hidden="true"></i>
                             <span id="playlist-count"></span> videos
                         </div>
+                        <p class="text-muted small">You're about to download a YouTube playlist. All videos will be bundled into a single ZIP file.</p>
                     </div>
-                    <div id="playlist-items" class="playlist-items"></div>
+                    <div class="alert alert-info mb-3">
+                        <i class="bi bi-info-circle me-2" aria-hidden="true"></i>
+                        <span>Downloading a complete playlist may take longer depending on the number of videos and selected quality.</span>
+                    </div>
+                    <h5 class="h6 mb-2">Playlist Contents <span class="text-muted small">(Preview)</span></h5>
+                    <div id="playlist-items" class="playlist-items" aria-label="Playlist videos preview"></div>
                 </div>
                 
                 <!-- Format Selection -->
@@ -122,35 +144,37 @@
                     <h5 class="mb-3">Download Options</h5>
                     
                     <!-- Tab Navigation -->
-                    <ul class="nav nav-tabs" id="formatTabs" role="tablist">
+                    <ul class="nav nav-tabs" id="formatTabs" role="tablist" aria-label="Download format options">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="video-tab-button" data-bs-toggle="tab" data-bs-target="#video-tab" 
                                     type="button" role="tab" aria-controls="video-tab" aria-selected="true">
-                                <i class="bi bi-camera-video me-2"></i>Video
+                                <i class="bi bi-camera-video me-2" aria-hidden="true"></i>Video
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="audio-tab-button" data-bs-toggle="tab" data-bs-target="#audio-tab" 
                                     type="button" role="tab" aria-controls="audio-tab" aria-selected="false">
-                                <i class="bi bi-music-note me-2"></i>Audio
+                                <i class="bi bi-music-note me-2" aria-hidden="true"></i>Audio
                             </button>
                         </li>
                     </ul>
                     
                     <!-- Tab Content -->
-                    <div class="tab-content" id="formatTabsContent">
+                    <div class="tab-content mt-3" id="formatTabsContent">
                         <div class="tab-pane fade show active" id="video-tab" role="tabpanel" aria-labelledby="video-tab-button">
-                            <div id="video-formats" class="format-options"></div>
+                            <h6 class="mb-3">Select Video Quality</h6>
+                            <div id="video-formats" class="format-options" aria-label="Video quality options"></div>
                         </div>
                         <div class="tab-pane fade" id="audio-tab" role="tabpanel" aria-labelledby="audio-tab-button">
-                            <div id="audio-formats" class="format-options"></div>
+                            <h6 class="mb-3">Select Audio Format</h6>
+                            <div id="audio-formats" class="format-options" aria-label="Audio format options"></div>
                         </div>
                     </div>
                     
                     <!-- Download Button -->
                     <div class="d-grid gap-2 mt-4">
-                        <button id="download-button" class="btn btn-success btn-lg download-btn" disabled>
-                            Select a format
+                        <button id="download-button" class="btn btn-success btn-lg download-btn" disabled aria-label="Download selected format">
+                            <i class="bi bi-download me-2" aria-hidden="true"></i>Select a format
                         </button>
                     </div>
                     
@@ -176,19 +200,145 @@
         </div>
         
         <!-- Usage Instructions -->
-        <div class="card mt-4">
-            <div class="card-header bg-dark">
-                <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>How to Use</h5>
+        <section class="mb-5" aria-labelledby="instructions-section">
+            <div class="card">
+                <div class="card-header bg-dark">
+                    <h2 id="instructions-section" class="h5 mb-0"><i class="bi bi-info-circle me-2" aria-hidden="true"></i>How to Use Our YouTube Downloader</h2>
+                </div>
+                <div class="card-body">
+                    <ol class="mb-0">
+                        <li class="mb-2">Enter a YouTube video or playlist URL in the input field above</li>
+                        <li class="mb-2">Click "Get Video Info" to retrieve video details</li>
+                        <li class="mb-2">Choose your preferred format (video quality or audio format)</li>
+                        <li>Click the download button and wait for the process to complete</li>
+                    </ol>
+                </div>
             </div>
-            <div class="card-body">
-                <ol class="mb-0">
-                    <li class="mb-2">Enter a YouTube video or playlist URL in the input field above</li>
-                    <li class="mb-2">Click "Get Video Info" to retrieve video details</li>
-                    <li class="mb-2">Choose your preferred format (video quality or audio format)</li>
-                    <li>Click the download button and wait for the process to complete</li>
-                </ol>
+        </section>
+        
+        <!-- FAQ Section - Great for SEO -->
+        <section class="mb-5" aria-labelledby="faq-section">
+            <h2 id="faq-section" class="h3 text-center mb-4">Frequently Asked Questions</h2>
+            
+            <div class="accordion" id="youtubeFAQ">
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="faqHeading1">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1" aria-expanded="true" aria-controls="faqCollapse1">
+                            Is this YouTube downloader free to use?
+                        </button>
+                    </h3>
+                    <div id="faqCollapse1" class="accordion-collapse collapse show" aria-labelledby="faqHeading1" data-bs-parent="#youtubeFAQ">
+                        <div class="accordion-body">
+                            <p>Yes, our YouTube downloader is completely free to use with no hidden fees or subscriptions. You can download as many videos as you want in various quality formats without any cost.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="faqHeading2">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
+                            What is the highest quality I can download YouTube videos in?
+                        </button>
+                    </h3>
+                    <div id="faqCollapse2" class="accordion-collapse collapse" aria-labelledby="faqHeading2" data-bs-parent="#youtubeFAQ">
+                        <div class="accordion-body">
+                            <p>Our YouTube downloader supports downloading videos in qualities up to 1080p Full HD. The available quality options depend on the original video uploaded to YouTube. Most modern videos offer 360p, 480p, 720p, and 1080p formats.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="faqHeading3">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
+                            How do I convert YouTube videos to MP3?
+                        </button>
+                    </h3>
+                    <div id="faqCollapse3" class="accordion-collapse collapse" aria-labelledby="faqHeading3" data-bs-parent="#youtubeFAQ">
+                        <div class="accordion-body">
+                            <p>To convert a YouTube video to MP3:</p>
+                            <ol>
+                                <li>Paste the YouTube video URL in the input field</li>
+                                <li>Click "Get Video Info" to analyze the video</li>
+                                <li>Select the "Audio" tab from the download options</li>
+                                <li>Choose "MP3" as your desired format</li>
+                                <li>Click the download button and wait for the conversion to complete</li>
+                            </ol>
+                            <p>The audio will be extracted in the highest quality available.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="faqHeading4">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse4" aria-expanded="false" aria-controls="faqCollapse4">
+                            Can I download entire YouTube playlists?
+                        </button>
+                    </h3>
+                    <div id="faqCollapse4" class="accordion-collapse collapse" aria-labelledby="faqHeading4" data-bs-parent="#youtubeFAQ">
+                        <div class="accordion-body">
+                            <p>Yes, our YouTube downloader fully supports playlist downloads. Simply paste a YouTube playlist URL and the tool will detect it automatically. All videos from the playlist will be downloaded and packaged as a convenient ZIP file for you to save.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="faqHeading5">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse5" aria-expanded="false" aria-controls="faqCollapse5">
+                            Is it legal to download YouTube videos?
+                        </button>
+                    </h3>
+                    <div id="faqCollapse5" class="accordion-collapse collapse" aria-labelledby="faqHeading5" data-bs-parent="#youtubeFAQ">
+                        <div class="accordion-body">
+                            <p>Downloading YouTube videos for personal use is generally acceptable in many countries. However, redistributing, selling, or publicly sharing downloaded content may violate copyright laws. Always respect content creators' rights and YouTube's Terms of Service. We recommend using this tool only for:</p>
+                            <ul>
+                                <li>Downloading videos you've created yourself</li>
+                                <li>Content licensed under Creative Commons</li>
+                                <li>Videos you want to watch offline for personal use</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
+        
+        <!-- Additional Benefits Section -->
+        <section class="mb-5" aria-labelledby="benefits-section">
+            <h2 id="benefits-section" class="h3 text-center mb-4">Why Our YouTube Downloader Stands Out</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h3 class="h5"><i class="bi bi-shield-check me-2 text-success" aria-hidden="true"></i>Secure & Private</h3>
+                            <p class="mb-0">All downloads happen on our secure servers. We don't store your data or track which videos you download, ensuring complete privacy.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h3 class="h5"><i class="bi bi-lightning me-2 text-warning" aria-hidden="true"></i>Fast Processing</h3>
+                            <p class="mb-0">Our optimized servers process your downloads with maximum speed, allowing you to save time when downloading large HD videos.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h3 class="h5"><i class="bi bi-laptop me-2 text-info" aria-hidden="true"></i>No Installation Required</h3>
+                            <p class="mb-0">Unlike desktop software, our web-based tool works instantly in your browser on any device - computer, tablet, or smartphone.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h3 class="h5"><i class="bi bi-database-check me-2 text-primary" aria-hidden="true"></i>Reliable Service</h3>
+                            <p class="mb-0">Our system automatically adapts to YouTube's updates to ensure our downloader always works properly with the latest video formats.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </div>
 {% endblock %}

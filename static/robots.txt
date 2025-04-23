@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://youtube-downloader.replit.app/static/sitemap.xml

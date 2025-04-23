@@ -3,13 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Downloader</title>
+    <meta name="description" content="Free YouTube video downloader that allows you to download YouTube videos and audio in multiple formats and qualities. Convert YouTube videos to MP3, MP4, and more.">
+    <meta name="keywords" content="YouTube downloader, download YouTube videos, YouTube to MP3, YouTube to MP4, save YouTube videos, YouTube music downloader, playlist downloader, online video downloader">
+    <meta name="author" content="YouTube Downloader Tool">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="YouTube Downloader - Download Videos and Audio in Multiple Formats">
+    <meta property="og:description" content="Free tool to download YouTube videos and convert them to MP3, MP4 and other formats. Support for playlists and high-quality downloads.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:image" content="{{ url_for('static', filename='img/youtube-downloader-thumbnail.png', _external=True) }}">
+    <title>YouTube Downloader - Download Videos and Audio in High Quality | Free Online Tool</title>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request.url }}">
     
     <!-- Bootstrap CSS (Replit dark theme) -->
-    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <link rel="preload" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css"></noscript>
     
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"></noscript>
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -17,6 +31,31 @@
     
     <!-- Favicon -->
     <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>▶️</text></svg>" type="image/svg+xml">
+    
+    <!-- JSON-LD for structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "YouTube Downloader",
+      "url": "{{ request.url }}",
+      "description": "Free YouTube video downloader that allows you to download YouTube videos and audio in multiple formats and qualities.",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Download YouTube videos in multiple quality formats",
+        "Extract audio from YouTube videos",
+        "Support for playlist downloads",
+        "No registration required",
+        "Free to use"
+      ]
+    }
+    </script>
 </head>
 <body>
     <!-- Navbar -->
@@ -57,16 +96,29 @@
     <footer class="bg-dark text-light py-4">
         <div class="container">
             <div class="row">
-                <div class="col-md-6 text-center text-md-start">
-                    <h5><i class="bi bi-youtube text-danger me-2"></i> YouTube Downloader</h5>
-                    <p class="small">A tool to download YouTube videos and audio with various quality options.</p>
+                <div class="col-lg-4 mb-4 mb-lg-0 text-center text-lg-start">
+                    <h5><i class="bi bi-youtube text-danger me-2" aria-hidden="true"></i> YouTube Downloader</h5>
+                    <p class="small">The best free online tool to download YouTube videos in MP4, MP3, and other high-quality formats. No registration required.</p>
                 </div>
-                <div class="col-md-6 text-center text-md-end">
+                <div class="col-lg-4 mb-4 mb-lg-0 text-center">
+                    <h5 class="h6">Popular Features</h5>
+                    <ul class="list-unstyled small">
+                        <li><i class="bi bi-check2 text-success me-1" aria-hidden="true"></i> MP4 video downloads in HD quality</li>
+                        <li><i class="bi bi-check2 text-success me-1" aria-hidden="true"></i> MP3 audio extraction</li>
+                        <li><i class="bi bi-check2 text-success me-1" aria-hidden="true"></i> Playlist downloads to ZIP files</li>
+                        <li><i class="bi bi-check2 text-success me-1" aria-hidden="true"></i> Fast, secure server processing</li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 text-center text-lg-end">
+                    <h5 class="h6">Important Information</h5>
                     <p class="small">
-                        <i class="bi bi-info-circle me-1"></i> For personal use only. Please respect YouTube's terms of service.
+                        <i class="bi bi-info-circle me-1" aria-hidden="true"></i> For personal use only. Please respect content creators and YouTube's terms of service.
                     </p>
                     <p class="small mb-0">
-                        <i class="bi bi-shield-check me-1"></i> No user data is stored on our servers.
+                        <i class="bi bi-shield-check me-1" aria-hidden="true"></i> No personal data is stored on our servers. Your privacy is our priority.
+                    </p>
+                    <p class="small mt-3">
+                        <span class="text-muted">© 2025 YouTube Downloader Tool</span>
                     </p>
                 </div>
             </div>

@@ -567,6 +567,26 @@ document.addEventListener('DOMContentLoaded', function() {
                             downloadCompleteAlert.style.display = 'block';
                             downloadLink.href = status.download_url;
                             downloadLink.download = status.filename ? status.filename.split('/').pop() : 'youtube_download';
+                            
+                            // Check if quality was downgraded and display message
+                            if (status.quality_downgraded && status.quality_message) {
+                                // Create or update the quality message element
+                                let qualityAlertElement = document.getElementById('quality-downgrade-alert');
+                                if (!qualityAlertElement) {
+                                    qualityAlertElement = document.createElement('div');
+                                    qualityAlertElement.id = 'quality-downgrade-alert';
+                                    qualityAlertElement.className = 'alert alert-info mt-3';
+                                    qualityAlertElement.role = 'alert';
+                                    // Insert the quality alert before the download link alert
+                                    downloadCompleteAlert.parentNode.insertBefore(qualityAlertElement, downloadCompleteAlert);
+                                }
+                                // Update the message
+                                qualityAlertElement.innerHTML = `
+                                    <i class="bi bi-info-circle-fill me-2"></i>
+                                    <strong>Quality Notification:</strong> ${status.quality_message}
+                                `;
+                                qualityAlertElement.style.display = 'block';
+                            }
                         }
                         
                         if (status.status === 'error') {

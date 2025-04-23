@@ -339,6 +339,12 @@ class YoutubeDownloader:
         # Generate a sanitized output filename template
         output_template = os.path.join(output_path, '%(title)s.%(ext)s')
         
+        # Track quality downgrade info
+        quality_downgraded = False
+        requested_quality = format_id
+        actual_quality = format_id
+        quality_message = None
+        
         # Configure options for yt-dlp
         ydl_opts = {
             'format': format_id,
@@ -354,24 +360,71 @@ class YoutubeDownloader:
         if progress_hook:
             ydl_opts['progress_hooks'] = [progress_hook]
         
-        # If it's a playlist and format selection is a named quality, map it
-        if playlist and format_id in ['8K', '4K', '2K', '1080p', '720p', '480p', '360p', '240p']:
-            if format_id == '8K' or '4320p' in format_id:
-                ydl_opts['format'] = 'bestvideo[height<=4320]+bestaudio/best[height<=4320]'
-            elif format_id == '4K' or '2160p' in format_id:
-                ydl_opts['format'] = 'bestvideo[height<=2160]+bestaudio/best[height<=2160]'
-            elif format_id == '2K' or '1440p' in format_id:
-                ydl_opts['format'] = 'bestvideo[height<=1440]+bestaudio/best[height<=1440]'
-            elif format_id == '1080p':
-                ydl_opts['format'] = 'bestvideo[height<=1080]+bestaudio/best[height<=1080]'
-            elif format_id == '720p':
-                ydl_opts['format'] = 'bestvideo[height<=720]+bestaudio/best[height<=720]'
-            elif format_id == '480p':
-                ydl_opts['format'] = 'bestvideo[height<=480]+bestaudio/best[height<=480]'
-            elif format_id == '360p':
-                ydl_opts['format'] = 'bestvideo[height<=360]+bestaudio/best[height<=360]'
-            elif format_id == '240p':
-                ydl_opts['format'] = 'bestvideo[height<=240]+bestaudio/best[height<=240]'
+        # Dictionary to map named quality to format strings and their fallback hierarchy
+        quality_map = {
+            '8K': {
+                'format': 'bestvideo[height<=4320]+bestaudio/best[height<=4320]', 
+                'height': 4320,
+                'label': '8K (4320p) - Highest Quality'
+            },
+            '4320p': {
+                'format': 'bestvideo[height<=4320]+bestaudio/best[height<=4320]', 
+                'height': 4320,
+                'label': '8K (4320p) - Highest Quality'
+            },
+            '4K': {
+                'format': 'bestvideo[height<=2160]+bestaudio/best[height<=2160]', 
+                'height': 2160,
+                'label': '4K (2160p) - Ultra High Quality'
+            },
+            '2160p': {
+                'format': 'bestvideo[height<=2160]+bestaudio/best[height<=2160]', 
+                'height': 2160,
+                'label': '4K (2160p) - Ultra High Quality'
+            },
+            '2K': {
+                'format': 'bestvideo[height<=1440]+bestaudio/best[height<=1440]', 
+                'height': 1440,
+                'label': '2K (1440p) - Very High Quality'
+            },
+            '1440p': {
+                'format': 'bestvideo[height<=1440]+bestaudio/best[height<=1440]', 
+                'height': 1440,
+                'label': '2K (1440p) - Very High Quality'
+            },
+            '1080p': {
+                'format': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]', 
+                'height': 1080,
+                'label': '1080p - Full HD Quality'
+            },
+            '720p': {
+                'format': 'bestvideo[height<=720]+bestaudio/best[height<=720]', 
+                'height': 720,
+                'label': '720p - HD Quality'
+            },
+            '480p': {
+                'format': 'bestvideo[height<=480]+bestaudio/best[height<=480]', 
+                'height': 480,
+                'label': '480p - Standard Quality'
+            },
+            '360p': {
+                'format': 'bestvideo[height<=360]+bestaudio/best[height<=360]', 
+                'height': 360,
+                'label': '360p - Low Quality'
+            },
+            '240p': {
+                'format': 'bestvideo[height<=240]+bestaudio/best[height<=240]', 
+                'height': 240,
+                'label': '240p - Very Low Quality'
+            }
+        }
+        
+        # Resolution fallback hierarchy (from highest to lowest)
+        resolution_hierarchy = [4320, 2160, 1440, 1080, 720, 480, 360, 240]
+        
+        # If using a named quality (for both single videos and playlists)
+        if format_id in quality_map:
+            ydl_opts['format'] = quality_map[format_id]['format']
         
         # For playlists, create a ZIP file
         if playlist:
@@ -383,8 +436,79 @@ class YoutubeDownloader:
         for attempt in range(self.RETRY_COUNT):
             try:
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    # First extract info without downloading to check available formats
+                    if requested_quality in quality_map and not playlist:
+                        info = ydl.extract_info(url, download=False)
+                        available_heights = []
+                        
+                        # Check which resolutions are actually available for this video
+                        for fmt in info.get('formats', []):
+                            if fmt.get('height') and fmt.get('vcodec') != 'none' and fmt.get('acodec') != 'none':
+                                available_heights.append(fmt.get('height'))
+                        
+                        # If we have height info from our quality map
+                        if available_heights and requested_quality in quality_map:
+                            requested_height = quality_map[requested_quality]['height']
+                            
+                            # Check if requested quality is available
+                            if requested_height not in available_heights:
+                                # Find the next best quality
+                                quality_downgraded = True
+                                
+                                # Get the highest available quality
+                                available_heights = sorted(available_heights, reverse=True)
+                                highest_available = available_heights[0]
+                                
+                                # Find the closest standard resolution in our hierarchy
+                                for height in resolution_hierarchy:
+                                    if height <= highest_available:
+                                        actual_height = height
+                                        break
+                                else:
+                                    actual_height = highest_available
+                                
+                                # Update format string to use highest available quality
+                                actual_format = f'bestvideo[height<={highest_available}]+bestaudio/best[height<={highest_available}]'
+                                ydl_opts['format'] = actual_format
+                                
+                                # Generate quality message
+                                for quality_key, quality_info in quality_map.items():
+                                    if quality_info['height'] == actual_height:
+                                        actual_quality = quality_key
+                                        quality_message = f"The requested quality ({requested_quality}) is not available. Using the highest available quality: {quality_info['label']}"
+                                        logger.info(quality_message)
+                                        break
+                                else:
+                                    actual_quality = f"{highest_available}p"
+                                    quality_message = f"The requested quality ({requested_quality}) is not available. Using the highest available quality: {highest_available}p"
+                                    logger.info(quality_message)
+                    
+                    # Now download with potentially adjusted format
                     download_info = ydl.extract_info(url, download=True)
                     
+                    # Check if format was actually downgraded based on downloaded format
+                    if not quality_downgraded and 'requested_downloads' in download_info:
+                        downloaded_format = download_info['requested_downloads'][0]
+                        downloaded_height = downloaded_format.get('height', 0)
+                        
+                        if requested_quality in quality_map:
+                            requested_height = quality_map[requested_quality]['height']
+                            if downloaded_height and downloaded_height < requested_height:
+                                quality_downgraded = True
+                                actual_height = downloaded_height
+                                
+                                # Generate quality message
+                                for quality_key, quality_info in quality_map.items():
+                                    if quality_info['height'] == actual_height:
+                                        actual_quality = quality_key
+                                        quality_message = f"The requested quality ({requested_quality}) is not available. Using the highest available quality: {quality_info['label']}"
+                                        logger.info(quality_message)
+                                        break
+                                else:
+                                    actual_quality = f"{downloaded_height}p"
+                                    quality_message = f"The requested quality ({requested_quality}) is not available. Using the highest available quality: {downloaded_height}p"
+                                    logger.info(quality_message)
+                                
                     if playlist:
                         # Create a ZIP file for playlist
                         import zipfile
@@ -571,7 +695,14 @@ class YoutubeDownloader:
         if not video_file or not os.path.exists(video_file):
             raise ValueError("Failed to download video after multiple attempts. The video may be unavailable or restricted.")
         
-        return video_file
+        # Return video file path along with quality downgrade information
+        return {
+            'filepath': video_file,
+            'quality_downgraded': quality_downgraded,
+            'requested_quality': requested_quality,
+            'actual_quality': actual_quality,
+            'quality_message': quality_message
+        }
     
     def download_audio(self, url, output_path=None, progress_hook=None, playlist=False):
         """Download audio from a YouTube video"""
@@ -805,7 +936,14 @@ class YoutubeDownloader:
         if not audio_file or not os.path.exists(audio_file):
             raise ValueError("Failed to download audio after multiple attempts. The video may be unavailable or restricted.")
         
-        return audio_file
+        # For consistency, return the same structure as download_video
+        return {
+            'filepath': audio_file,
+            'quality_downgraded': False,  # Audio doesn't have the same quality levels
+            'requested_quality': 'best',
+            'actual_quality': 'best',
+            'quality_message': None
+        }
     
     def _pytube_progress_callback(self, progress_hook):
         """Create a progress callback for pytube that mimics yt-dlp's progress hook format"""

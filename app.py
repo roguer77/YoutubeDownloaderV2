@@ -195,14 +195,14 @@ def process_download(download_id, url, format_id, download_type, playlist):
         
         # Perform the download
         if download_type == 'audio':
-            filename = downloader.download_audio(
+            download_result = downloader.download_audio(
                 url, 
                 output_path=TEMP_DIR, 
                 progress_hook=progress_hook,
                 playlist=playlist
             )
         else:  # video
-            filename = downloader.download_video(
+            download_result = downloader.download_video(
                 url, 
                 format_id=format_id, 
                 output_path=TEMP_DIR, 
@@ -210,10 +210,22 @@ def process_download(download_id, url, format_id, download_type, playlist):
                 playlist=playlist
             )
         
+        # Get file path and quality info from result
+        filename = download_result['filepath']
+        quality_downgraded = download_result.get('quality_downgraded', False)
+        quality_message = download_result.get('quality_message')
+        
         # Update download status
         with downloads_lock:
             download_progress[download_id]['status'] = 'complete'
             download_progress[download_id]['filename'] = filename
+            
+            # Add quality downgrade information if applicable
+            if quality_downgraded:
+                download_progress[download_id]['quality_downgraded'] = True
+                download_progress[download_id]['quality_message'] = quality_message
+                download_progress[download_id]['requested_quality'] = download_result.get('requested_quality')
+                download_progress[download_id]['actual_quality'] = download_result.get('actual_quality')
             
             # Update database record if we have one
             db_id = download_progress[download_id].get('db_id')

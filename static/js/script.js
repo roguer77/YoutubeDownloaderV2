@@ -88,8 +88,32 @@ document.addEventListener('DOMContentLoaded', function() {
         // Reset UI state
         resetUI();
         
-        // Show loader
+        // Add animation class to loader
+        videoLoader.classList.add('fade-enter');
+        
+        // Show and style loader
         videoLoader.style.display = 'block';
+        
+        // Animate loader appearance
+        setTimeout(() => {
+            videoLoader.classList.remove('fade-enter');
+            videoLoader.classList.add('fade-enter-active');
+        }, 10);
+        
+        // Scroll to loader smoothly
+        videoLoader.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Update loader text for better UX
+        const loaderText = videoLoader.querySelector('p');
+        loaderText.innerHTML = 'Analyzing YouTube link <span class="spinner-text">...</span>';
+        
+        // Create animated dots for loader text
+        const spinnerText = loaderText.querySelector('.spinner-text');
+        let dotCount = 3;
+        const dotInterval = setInterval(() => {
+            spinnerText.textContent = '.'.repeat(dotCount);
+            dotCount = (dotCount % 3) + 1;
+        }, 500);
         
         // Fetch video info from server
         const formData = new FormData();
@@ -108,19 +132,47 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(data => {
-            // Hide loader
-            videoLoader.style.display = 'none';
+            // Clear dot animation interval
+            clearInterval(dotInterval);
             
-            // Store video info
-            currentVideoInfo = data;
-            isPlaylist = data.is_playlist;
+            // Show success message in loader
+            loaderText.innerHTML = 'Video details found! <i class="bi bi-check-circle-fill text-success"></i>';
             
-            // Display video information
-            displayVideoInfo(data);
+            // Add exit animation to loader
+            setTimeout(() => {
+                videoLoader.classList.remove('fade-enter-active');
+                videoLoader.classList.add('fade-exit-active');
+                
+                // Store video info
+                currentVideoInfo = data;
+                isPlaylist = data.is_playlist;
+                
+                // Display video information
+                displayVideoInfo(data);
+                
+                // Hide loader after animation completes
+                setTimeout(() => {
+                    videoLoader.style.display = 'none';
+                    videoLoader.classList.remove('fade-exit-active');
+                    
+                    // Scroll to video info section smoothly
+                    videoInfoContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 500);
+            }, 1000);
         })
         .catch(error => {
-            videoLoader.style.display = 'none';
-            showError(error.message);
+            // Clear dot animation interval
+            clearInterval(dotInterval);
+            
+            // Hide loader with animation
+            videoLoader.classList.remove('fade-enter-active');
+            videoLoader.classList.add('fade-exit-active');
+            
+            setTimeout(() => {
+                videoLoader.style.display = 'none';
+                videoLoader.classList.remove('fade-exit-active');
+                showError(error.message);
+            }, 500);
         });
     }
     

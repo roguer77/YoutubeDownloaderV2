@@ -403,7 +403,12 @@ document.addEventListener('DOMContentLoaded', function() {
         isDownloading = true;
         updateDownloadButton();
         
-        // Show progress container
+        // Show the cool loader
+        coolLoaderContainer.style.display = 'flex';
+        loaderText.textContent = 'Starting your download...';
+        loaderProgressBar.style.width = '0%';
+        
+        // Show progress container (for backward compatibility)
         progressContainer.style.display = 'block';
         progressBar.style.width = '0%';
         progressBar.setAttribute('aria-valuenow', '0');
@@ -493,27 +498,72 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function updateProgressUI(status) {
         if (status.status === 'starting') {
+            // Update standard progress bar
             progressBar.style.width = '0%';
             progressBar.setAttribute('aria-valuenow', '0');
             progressText.textContent = 'Starting download...';
+            
+            // Update cool loader
+            loaderProgressBar.style.width = '0%';
+            loaderText.textContent = 'Initializing your download...';
         } else if (status.status === 'downloading') {
             const progress = Math.round(status.progress);
+            
+            // Update standard progress bar
             progressBar.style.width = `${progress}%`;
             progressBar.setAttribute('aria-valuenow', progress);
             progressText.textContent = `Downloading: ${progress}%`;
+            
+            // Update cool loader
+            loaderProgressBar.style.width = `${progress}%`;
+            
+            if (progress < 25) {
+                loaderText.textContent = `Getting your ${downloadType} ready... ${progress}%`;
+            } else if (progress < 50) {
+                loaderText.textContent = `Downloading ${downloadType} data... ${progress}%`;
+            } else if (progress < 75) {
+                loaderText.textContent = `Almost there! ${progress}%`;
+            } else {
+                loaderText.textContent = `Finalizing your ${downloadType}... ${progress}%`;
+            }
         } else if (status.status === 'processing') {
+            // Update standard progress bar
             progressBar.style.width = '100%';
             progressBar.setAttribute('aria-valuenow', '100');
             progressText.textContent = 'Processing file...';
+            
+            // Update cool loader
+            loaderProgressBar.style.width = '100%';
+            loaderText.textContent = 'Processing your file...';
         } else if (status.status === 'complete') {
+            // Update standard progress bar
             progressBar.style.width = '100%';
             progressBar.setAttribute('aria-valuenow', '100');
             progressText.textContent = 'Download complete!';
+            
+            // Update cool loader
+            loaderProgressBar.style.width = '100%';
+            loaderText.textContent = 'Download complete!';
+            
+            // Hide cool loader after a brief delay
+            setTimeout(() => {
+                coolLoaderContainer.style.display = 'none';
+            }, 1000);
         } else if (status.status === 'error') {
+            // Update standard progress bar
             progressBar.style.width = '100%';
             progressBar.classList.remove('bg-success');
             progressBar.classList.add('bg-danger');
             progressText.textContent = `Error: ${status.error || 'Unknown error'}`;
+            
+            // Update cool loader
+            loaderProgressBar.style.width = '100%';
+            loaderText.textContent = `Error: ${status.error || 'Unknown error'}`;
+            
+            // Hide cool loader after a brief delay
+            setTimeout(() => {
+                coolLoaderContainer.style.display = 'none';
+            }, 2000);
         }
     }
     
@@ -606,6 +656,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Hide download complete alert
         downloadCompleteAlert.style.display = 'none';
+        
+        // Hide cool loader
+        coolLoaderContainer.style.display = 'none';
         
         // Reset global variables
         selectedFormat = null;

@@ -104,10 +104,13 @@ class YoutubeDownloader:
                         'entries': [],
                         'formats': [
                             {'format_id': 'best', 'format_note': 'Best Quality (Video)'},
-                            {'format_id': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]', 'format_note': '1080p (High Quality)'},
-                            {'format_id': 'bestvideo[height<=720]+bestaudio/best[height<=720]', 'format_note': '720p (Medium Quality)'},
-                            {'format_id': 'bestvideo[height<=480]+bestaudio/best[height<=480]', 'format_note': '480p (Low Quality)'},
-                            {'format_id': 'bestvideo[height<=360]+bestaudio/best[height<=360]', 'format_note': '360p (Low Quality)'}
+                            {'format_id': 'bestvideo[height<=4320]+bestaudio/best[height<=4320]', 'format_note': '8K Ultra HD (4320p)'},
+                            {'format_id': 'bestvideo[height<=2160]+bestaudio/best[height<=2160]', 'format_note': '4K Ultra HD (2160p)'},
+                            {'format_id': 'bestvideo[height<=1440]+bestaudio/best[height<=1440]', 'format_note': '2K Quad HD (1440p)'},
+                            {'format_id': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]', 'format_note': '1080p Full HD'},
+                            {'format_id': 'bestvideo[height<=720]+bestaudio/best[height<=720]', 'format_note': '720p HD'},
+                            {'format_id': 'bestvideo[height<=480]+bestaudio/best[height<=480]', 'format_note': '480p SD'},
+                            {'format_id': 'bestvideo[height<=360]+bestaudio/best[height<=360]', 'format_note': '360p Low Quality'}
                         ],
                         'audio_formats': [
                             {'format_id': 'bestaudio', 'format_note': 'Best Quality (Audio)'},

@@ -112,7 +112,8 @@ def download_video():
                 'progress': 0,
                 'status': 'starting',
                 'filename': None,
-                'db_id': None  # Will store database record ID
+                'db_id': None,  # Will store database record ID
+                'start_time': time.time()  # Track when download started
             }
         
         # Record download in database
@@ -213,12 +214,45 @@ def process_download(download_id, url, format_id, download_type, playlist):
         with downloads_lock:
             download_progress[download_id]['status'] = 'complete'
             download_progress[download_id]['filename'] = filename
+            
+            # Update database record if we have one
+            db_id = download_progress[download_id].get('db_id')
+            if db_id:
+                try:
+                    # Get file size if available
+                    file_size = os.path.getsize(filename) if os.path.exists(filename) else None
+                    
+                    # Calculate download time (estimate)
+                    start_time = download_progress[download_id].get('start_time', time.time() - 30)
+                    download_time = time.time() - start_time
+                    
+                    # Update record in database
+                    Download.update_status(
+                        download_id=db_id,
+                        status="completed",
+                        file_size=file_size,
+                        download_time=download_time
+                    )
+                except Exception as db_error:
+                    logger.error(f"Error updating download record: {str(db_error)}")
     
     except Exception as e:
         logger.error(f"Download error: {str(e)}")
         with downloads_lock:
             download_progress[download_id]['status'] = 'error'
             download_progress[download_id]['error'] = str(e)
+            
+            # Update database record if we have one
+            db_id = download_progress[download_id].get('db_id')
+            if db_id:
+                try:
+                    # Update record in database
+                    Download.update_status(
+                        download_id=db_id,
+                        status="failed"
+                    )
+                except Exception as db_error:
+                    logger.error(f"Error updating download record: {str(db_error)}")
 
 @app.route('/download_status/<download_id>', methods=['GET'])
 def check_download_status(download_id):
@@ -294,6 +328,73 @@ def robots():
 def sitemap():
     """Serve sitemap.xml file"""
     return send_from_directory('static', 'sitemap.xml')
+
+@app.route('/admin')
+def admin_dashboard():
+    """Admin dashboard with download statistics"""
+    # This should have proper authentication in production
+    
+    # Get overall statistics
+    current_date = datetime.datetime.utcnow().date()
+    last_week = current_date - datetime.timedelta(days=7)
+    
+    # Get all stats data
+    all_stats = Statistics.query.all()
+    
+    # Calculate total statistics
+    total_visits = sum(stat.visits for stat in all_stats)
+    total_downloads = sum(stat.downloads for stat in all_stats)
+    video_downloads = sum(stat.video_downloads for stat in all_stats)
+    audio_downloads = sum(stat.audio_downloads for stat in all_stats)
+    
+    # Prepare chart data for last 7 days
+    last_7_days = []
+    for i in range(6, -1, -1):
+        day = current_date - datetime.timedelta(days=i)
+        last_7_days.append(day)
+    
+    # Format dates and get data for chart
+    date_labels = [day.strftime('%b %d') for day in last_7_days]
+    visits_data = []
+    downloads_data = []
+    
+    for day in last_7_days:
+        stat = Statistics.query.filter_by(date=day).first()
+        visits_data.append(stat.visits if stat else 0)
+        downloads_data.append(stat.downloads if stat else 0)
+    
+    # Get popular downloads (using raw SQL for grouping and counting)
+    from sqlalchemy import text
+    popular_downloads = db.session.execute(
+        text("""
+        SELECT video_title, format_type, quality, COUNT(*) as count
+        FROM download
+        WHERE status = 'completed'
+        GROUP BY video_title, format_type, quality
+        ORDER BY count DESC
+        LIMIT 10
+        """)
+    ).fetchall()
+    
+    # Get recent downloads
+    recent_downloads = Download.query.order_by(Download.created_at.desc()).limit(20).all()
+    
+    return render_template(
+        'admin.html',
+        stats={
+            'total_visits': total_visits,
+            'total_downloads': total_downloads,
+            'video_downloads': video_downloads,
+            'audio_downloads': audio_downloads
+        },
+        chart_data={
+            'labels': date_labels,
+            'visits': visits_data,
+            'downloads': downloads_data
+        },
+        popular_downloads=popular_downloads,
+        recent_downloads=recent_downloads
+    )
 
 # SEO-optimized metadata for page titles and descriptions
 @app.context_processor

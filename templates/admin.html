@@ -1,0 +1,234 @@
+{% extends "layout.html" %}
+{% set title = "Admin Dashboard - YouTube Downloader Statistics" %}
+{% set description = "Admin dashboard for YouTube Downloader showing download statistics and history." %}
+
+{% block content %}
+<div class="container my-5 pt-5">
+    <div class="row mb-4">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="mb-3">Admin Dashboard</h1>
+            <p class="lead text-muted">Download statistics and history</p>
+        </div>
+    </div>
+    
+    <!-- Stats Summary Cards -->
+    <div class="row mb-5">
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <h3 class="text-primary display-4 fw-bold">{{ stats.total_visits }}</h3>
+                    <p class="text-muted mb-0">Total Visits</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <h3 class="text-success display-4 fw-bold">{{ stats.total_downloads }}</h3>
+                    <p class="text-muted mb-0">Total Downloads</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <h3 class="text-info display-4 fw-bold">{{ stats.video_downloads }}</h3>
+                    <p class="text-muted mb-0">Video Downloads</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <h3 class="text-warning display-4 fw-bold">{{ stats.audio_downloads }}</h3>
+                    <p class="text-muted mb-0">Audio Downloads</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Traffic Chart -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light">
+                    <h2 class="h5 mb-0">Traffic Trends (Last 7 Days)</h2>
+                </div>
+                <div class="card-body">
+                    <canvas id="trafficChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popular Downloads -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light">
+                    <h2 class="h5 mb-0">Most Popular Downloads</h2>
+                </div>
+                <div class="card-body">
+                    {% if popular_downloads %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Video Title</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Quality</th>
+                                        <th scope="col">Downloads</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for download in popular_downloads %}
+                                    <tr>
+                                        <td>{{ download.video_title }}</td>
+                                        <td>
+                                            {% if download.format_type == 'video' %}
+                                                <span class="badge bg-primary">Video</span>
+                                            {% else %}
+                                                <span class="badge bg-warning">Audio</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ download.quality }}</td>
+                                        <td>{{ download.count }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            No download data available yet.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Downloads -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light">
+                    <h2 class="h5 mb-0">Recent Downloads</h2>
+                </div>
+                <div class="card-body">
+                    {% if recent_downloads %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Video Title</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Size</th>
+                                        <th scope="col">Time</th>
+                                        <th scope="col">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for download in recent_downloads %}
+                                    <tr>
+                                        <td>{{ download.video_title }}</td>
+                                        <td>
+                                            {% if download.format_type == 'video' %}
+                                                <span class="badge bg-primary">Video</span>
+                                            {% else %}
+                                                <span class="badge bg-warning">Audio</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if download.status == 'completed' %}
+                                                <span class="badge bg-success">Completed</span>
+                                            {% elif download.status == 'failed' %}
+                                                <span class="badge bg-danger">Failed</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">{{ download.status }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if download.file_size %}
+                                                {{ (download.file_size / 1024 / 1024) | round(2) }} MB
+                                            {% else %}
+                                                --
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if download.download_time %}
+                                                {{ download.download_time | round(1) }}s
+                                            {% else %}
+                                                --
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ download.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            No download data available yet.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js for visualization -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Traffic chart data
+        const ctx = document.getElementById('trafficChart').getContext('2d');
+        const trafficChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ chart_data.labels | tojson }},
+                datasets: [
+                    {
+                        label: 'Visits',
+                        data: {{ chart_data.visits | tojson }},
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Downloads',
+                        data: {{ chart_data.downloads | tojson }},
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

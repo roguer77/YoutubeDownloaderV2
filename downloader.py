@@ -160,7 +160,23 @@ class YoutubeDownloader:
                             # Create a format display name with resolution and bitrate
                             if height > 0:
                                 resolution = f"{width}x{height}"
-                                display_name = f"{height}p"
+                                
+                                # Use more descriptive format labels with resolution classes
+                                if height >= 4320:
+                                    display_name = f"8K Ultra HD ({height}p)"
+                                elif height >= 2160:
+                                    display_name = f"4K Ultra HD ({height}p)"
+                                elif height >= 1440:
+                                    display_name = f"2K Quad HD ({height}p)"
+                                elif height >= 1080:
+                                    display_name = f"Full HD ({height}p)"
+                                elif height >= 720:
+                                    display_name = f"HD ({height}p)"
+                                elif height >= 480:
+                                    display_name = f"SD ({height}p)"
+                                else:
+                                    display_name = f"Low Quality ({height}p)"
+                                
                                 if tbr > 0:
                                     display_name += f" ({round(tbr)}kbps)"
                                 display_name += f" - {ext.upper()}"

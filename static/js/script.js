@@ -25,6 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const audioTabButton = document.getElementById('audio-tab-button');
     const playlistItemsContainer = document.getElementById('playlist-items');
     const playlistInfoContainer = document.getElementById('playlist-info');
+    // Cool loader elements
+    const coolLoaderContainer = document.getElementById('cool-loader-container');
+    const loaderText = document.getElementById('loader-text');
+    const loaderProgressBar = document.getElementById('loader-progress-bar');
     
     // Global variables
     let currentVideoInfo = null;

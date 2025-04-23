@@ -3,6 +3,7 @@ import logging
 import tempfile
 import time
 import threading
+import datetime
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 import urllib.parse
@@ -10,6 +11,7 @@ import urllib.parse
 # Import our modules
 from downloader import YoutubeDownloader
 from cache_manager import CacheManager
+from models import db, Download, Statistics
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, 
@@ -19,6 +21,26 @@ logger = logging.getLogger(__name__)
 # Initialize Flask app
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "youtube_downloader_secret")
+
+# Configure database
+database_url = os.environ.get("DATABASE_URL")
+if database_url and database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    "pool_recycle": 300,
+    "pool_pre_ping": True,
+}
+logger.debug(f"Database URL configured: {database_url is not None}")
+
+# Initialize the database
+db.init_app(app)
+
+# Create database tables if they don't exist
+with app.app_context():
+    db.create_all()
+    logger.debug("Database tables created")
 
 # Initialize the downloader and cache manager
 downloader = YoutubeDownloader()
@@ -35,6 +57,8 @@ downloads_lock = threading.Lock()
 @app.route('/')
 def index():
     """Main page with the video download form"""
+    # Record site visit for statistics
+    Statistics.record_visit()
     return render_template('index.html')
     
 @app.route('/faq')
@@ -74,6 +98,7 @@ def download_video():
     format_id = request.form.get('format', 'best')
     download_type = request.form.get('type', 'video')
     playlist = request.form.get('playlist', 'false') == 'true'
+    video_title = request.form.get('title', 'Unknown Video')
     
     if not url:
         flash('Please enter a valid YouTube URL', 'danger')
@@ -86,8 +111,42 @@ def download_video():
             download_progress[download_id] = {
                 'progress': 0,
                 'status': 'starting',
-                'filename': None
+                'filename': None,
+                'db_id': None  # Will store database record ID
             }
+        
+        # Record download in database
+        try:
+            # Get client IP (we'll anonymize it for privacy)
+            ip_address = request.remote_addr
+            if ip_address:
+                # Anonymize IP by removing last octet
+                ip_parts = ip_address.split('.')
+                if len(ip_parts) == 4:  # IPv4
+                    ip_address = f"{ip_parts[0]}.{ip_parts[1]}.{ip_parts[2]}.0"
+                else:
+                    ip_address = "0.0.0.0"  # Fallback
+            
+            # Create download record
+            download_record = Download.add_download(
+                url=url,
+                video_title=video_title,
+                format_type=download_type,
+                quality=format_id,
+                status="started",
+                ip_address=ip_address
+            )
+            
+            # Store database ID in progress tracker
+            with downloads_lock:
+                download_progress[download_id]['db_id'] = download_record.id
+                
+            # Record download in statistics
+            Statistics.record_download(download_type)
+            
+        except Exception as db_error:
+            logger.error(f"Error recording download in database: {str(db_error)}")
+            # Continue with download even if database recording fails
         
         # Start download in background thread
         download_thread = threading.Thread(
